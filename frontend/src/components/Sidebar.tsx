@@ -18,7 +18,7 @@ const Sidebar = () => {
         <ListItemText primary="History" />
       </ListItemButton>
 
-      <ListItemButton onClick={() => navigate("/dilemmas")}>
+      {/* <ListItemButton onClick={() => navigate("/dilemmas")}>
         <ListItemText primary="Dilemmas" />
       </ListItemButton>
 
@@ -28,7 +28,7 @@ const Sidebar = () => {
 
       <ListItemButton onClick={() => navigate("/about")}>
         <ListItemText primary="About / Methodology" />
-      </ListItemButton>
+      </ListItemButton> */}
     </List>
   );
 };
