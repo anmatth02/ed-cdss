@@ -26,6 +26,8 @@ const steps = [
   "Result",
 ];
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const NewCase = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [result, setResult] = useState<CaseResult | null>(null);
@@ -113,8 +115,8 @@ const NewCase = () => {
 
   const handleSubmit = async () => {
     try {
-      // 1️⃣ Create Patient
-      const patientRes = await fetch("${import.meta.env.VITE_API_URL}/cases/patients", {
+      // 1️⃣ Create Patien
+      const patientRes = await fetch(`${API_URL}/cases/patients`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -132,7 +134,7 @@ const NewCase = () => {
       const patientData = await patientRes.json();
 
       // 2️⃣ Create Case
-      const caseRes = await fetch("${import.meta.env.VITE_API_URL}/cases/", {
+      const caseRes = await fetch(`${API_URL}/cases/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

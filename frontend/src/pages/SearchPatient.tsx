@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Container, Paper, TextField, Button, Typography } from "@mui/material";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 type PatientSummary = {
   patient_id: string;
   total_visits: number;
@@ -15,7 +17,7 @@ const SearchPatient = () => {
   const searchPatient = async () => {
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/cases/patients/${patientId}/summary`
+        `${API_URL}/cases/patients/${patientId}/summary`
       );
 
       const data = await res.json();

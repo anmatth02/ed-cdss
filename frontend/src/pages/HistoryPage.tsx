@@ -17,6 +17,8 @@ import {
   CartesianGrid,
 } from "recharts";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 type CaseType = {
   id: number;
   created_at: string;
@@ -42,7 +44,7 @@ const HistoryPage = () => {
 
   const fetchHistory = async () => {
     const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/cases/patients/by-national-id/${nationalId}/history`,
+      `${API_URL}/cases/patients/by-national-id/${nationalId}/history`,
     );
 
     const data = await res.json();
