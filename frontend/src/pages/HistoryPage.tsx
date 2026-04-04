@@ -42,7 +42,7 @@ const HistoryPage = () => {
 
   const fetchHistory = async () => {
     const res = await fetch(
-      `http://localhost:8000/cases/patients/by-national-id/${nationalId}/history`,
+      `${import.meta.env.VITE_API_URL}/cases/patients/by-national-id/${nationalId}/history`,
     );
 
     const data = await res.json();

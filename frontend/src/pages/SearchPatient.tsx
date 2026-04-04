@@ -15,7 +15,7 @@ const SearchPatient = () => {
   const searchPatient = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8000/cases/patients/${patientId}/summary`
+        `${import.meta.env.VITE_API_URL}/cases/patients/${patientId}/summary`
       );
 
       const data = await res.json();

@@ -114,7 +114,7 @@ const NewCase = () => {
   const handleSubmit = async () => {
     try {
       // 1️⃣ Create Patient
-      const patientRes = await fetch("http://localhost:8000/cases/patients", {
+      const patientRes = await fetch("${import.meta.env.VITE_API_URL}/cases/patients", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -132,7 +132,7 @@ const NewCase = () => {
       const patientData = await patientRes.json();
 
       // 2️⃣ Create Case
-      const caseRes = await fetch("http://localhost:8000/cases/", {
+      const caseRes = await fetch("${import.meta.env.VITE_API_URL}/cases/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
