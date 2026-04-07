@@ -2,8 +2,12 @@ def calculate_risk(case):
 
     score = 0
 
-    if case.triage_score >= 3:
+    if case.triage_score <= 1:
         score += 3
+    elif case.triage_score == 2:
+        score += 2
+    elif case.triage_score == 3:
+        score += 1
 
     if case.spo2 < 94:
         score += 2

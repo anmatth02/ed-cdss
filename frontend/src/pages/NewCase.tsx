@@ -199,6 +199,9 @@ const NewCase = () => {
 
   return (
     <Box sx={{ p: 3 }}>
+       <Typography variant="h4" fontWeight="bold" gutterBottom>
+          HospiGuide
+        </Typography>
       <Paper sx={{ p: 4, width: "90%", bgcolor: "#F7E3FA" }}>
         <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
           {steps.map((label) => (
@@ -256,7 +259,7 @@ const NewCase = () => {
 
             {/* Risk Score */}
             <Typography sx={{ mb: 1 }}>
-              Risk Score: {result.risk_score} / 10
+              Clinical Risk Score: {result.risk_score} / 10
             </Typography>
 
             <LinearProgress

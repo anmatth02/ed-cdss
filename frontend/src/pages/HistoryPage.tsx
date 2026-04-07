@@ -81,6 +81,9 @@ const HistoryPage = () => {
 
   return (
     <Box sx={{ p: 3 }}>
+       <Typography variant="h4" fontWeight="bold" gutterBottom>
+          HospiGuide
+        </Typography>
       <Paper sx={{ p: 4, width: "90%", bgcolor: "#F7E3FA" }}>
         <Typography variant="h5" gutterBottom>
           Patient History
@@ -169,7 +172,7 @@ const HistoryPage = () => {
                 />
 
                 <Typography sx={{ mt: 1 }}>
-                  Risk Score: {visit.risk_score}
+                  Clinical Risk Score: {visit.risk_score}
                 </Typography>
 
                 <Box sx={{ mt: 1 }}>

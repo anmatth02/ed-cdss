@@ -41,6 +41,7 @@ const StepVitals = ({ onNext, onBack, onChange }: Props) => {
 
   return (
     <Box>
+      <div>Symptoms</div>
       {/* Symptoms */}
       <FormControlLabel
         control={
@@ -198,13 +199,13 @@ const StepVitals = ({ onNext, onBack, onChange }: Props) => {
       />
 
       <TextField
-        label="Triage Score"
+        label="Triage Acuity Level"
         type="number"
         fullWidth
         margin="normal"
         value={asDisplayValue(local.triageScore)}
         placeholder="0–4"
-        helperText="Scale: 0–4 (clinical severity classification)"
+        helperText="0 = Resuscitation, 1 = Emergent, 2 = Urgent, 3 = Less Urgent, 4 = Non-Urgent"
         onChange={(e) => {
           const raw = e.target.value;
           setLocal({ ...local, triageScore: raw === "" ? 0 : Number(raw) });

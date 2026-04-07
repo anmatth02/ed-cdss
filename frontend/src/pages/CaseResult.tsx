@@ -27,7 +27,7 @@ const CaseResult = () => {
         />
 
         <Typography sx={{ mb: 1 }}>
-          Risk Score: {result.risk_score} / 10
+          Clinical Risk Score: {result.risk_score} / 10
         </Typography>
 
         <LinearProgress

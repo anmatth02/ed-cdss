@@ -4,9 +4,17 @@ def evaluate_risk(data):
     fired_rules = []
 
     # Triage
-    if data.triage_score >= 3:
+    if data.triage_score <= 1:
         score += 3
-        fired_rules.append("Triage score ≥ 3 → +3")
+        fired_rules.append("High-acuity triage (Resuscitation/Emergent) → +3")
+
+    elif data.triage_score == 2:
+        score += 2
+        fired_rules.append("Urgent triage classification → +2")
+
+    elif data.triage_score == 3:
+        score += 1
+        fired_rules.append("Less urgent triage classification → +1")
     elif data.triage_score == 2:
         score += 2
         fired_rules.append("Triage score = 2 → +2")

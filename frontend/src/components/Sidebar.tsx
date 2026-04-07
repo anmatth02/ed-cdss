@@ -1,34 +1,46 @@
 import { List, ListItemButton, ListItemText } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
+  const location = useLocation();
   const navigate = useNavigate();
 
+  const menuItems = [
+    { label: "Dashboard", path: "/dashboard" },
+    { label: "New Patient Case", path: "/cases/new" },
+    { label: "History", path: "/history" },
+  ];
+
   return (
-    <List sx={{ width: 240 }}>
-      <ListItemButton onClick={() => navigate("/dashboard")}>
-        <ListItemText primary="Dashboard" />
-      </ListItemButton>
+    <List sx={{ width: 240, p: 1 }}>
+      {menuItems.map((item) => {
+        const isActive = location.pathname === item.path;
 
-      <ListItemButton onClick={() => navigate("/cases/new")}>
-        <ListItemText primary="New Patient Case" />
-      </ListItemButton>
-
-      <ListItemButton onClick={() => navigate("/history")}>
-        <ListItemText primary="History" />
-      </ListItemButton>
-
-      {/* <ListItemButton onClick={() => navigate("/dilemmas")}>
-        <ListItemText primary="Dilemmas" />
-      </ListItemButton>
-
-      <ListItemButton onClick={() => navigate("/analytics")}>
-        <ListItemText primary="Analytics / Research" />
-      </ListItemButton>
-
-      <ListItemButton onClick={() => navigate("/about")}>
-        <ListItemText primary="About / Methodology" />
-      </ListItemButton> */}
+        return (
+          <ListItemButton
+            key={item.path}
+            onClick={() => navigate(item.path)}
+            sx={{
+              mb: 1,
+              borderRadius: 2,
+              backgroundColor: isActive ? "#ede7f6" : "transparent",
+              borderLeft: isActive ? "4px solid #5e35b1" : "4px solid transparent",
+              color: isActive ? "#4527a0" : "#1f1f1f",
+              transition: "all 0.2s ease",
+              "&:hover": {
+                backgroundColor: isActive ? "#e6ddf5" : "#f5f5f5",
+              },
+            }}
+          >
+            <ListItemText
+              primary={item.label}
+              primaryTypographyProps={{
+                fontWeight: isActive ? "bold" : "normal",
+              }}
+            />
+          </ListItemButton>
+        );
+      })}
     </List>
   );
 };
