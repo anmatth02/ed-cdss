@@ -1,5 +1,11 @@
 import { useLocation } from "react-router-dom";
-import { Paper, Container, Typography, LinearProgress, Chip } from "@mui/material";
+import {
+  Paper,
+  Container,
+  Typography,
+  LinearProgress,
+  Chip,
+} from "@mui/material";
 
 const CaseResult = () => {
   const location = useLocation();
@@ -7,9 +13,9 @@ const CaseResult = () => {
 
   if (!result) return <div>No result available</div>;
 
-  const getColor = (risk: string) => {
-    if (risk === "HIGH") return "error";
-    if (risk === "MEDIUM") return "warning";
+  const getColor = (decision: string) => {
+    if (decision === "HOSPITALIZATION") return "error";
+    if (decision === "DILEMMA") return "warning";
     return "success";
   };
 
@@ -21,24 +27,26 @@ const CaseResult = () => {
         </Typography>
 
         <Chip
-          label={`Risk Level: ${result.risk_level}`}
-          color={getColor(result.risk_level)}
+          label={`Decision: ${result.decision}`}
+          color={getColor(result.decision)}
           sx={{ mb: 2 }}
         />
 
         <Typography sx={{ mb: 1 }}>
-          Clinical Risk Score: {result.risk_score} / 10
+          Confidence: {Math.round((result.confidence ?? 0) * 100)}%
         </Typography>
 
         <LinearProgress
           variant="determinate"
-          value={result.risk_score * 10}
+          value={(result.confidence ?? 0) * 100}
           sx={{ height: 10, borderRadius: 5, mb: 3 }}
         />
 
-        <Typography>
-          Case ID: {result.case_id}
+        <Typography sx={{ mb: 2 }}>
+          Argumentation Type: {result.argument_type}
         </Typography>
+
+        <Typography>Case ID: {result.case_id}</Typography>
 
         <Typography>
           Created: {new Date(result.created_at).toLocaleString()}

@@ -3,7 +3,7 @@ from sqlalchemy import Column, String, Integer, Boolean, DateTime, ForeignKey
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from .database import Base
-
+from sqlalchemy import JSON, Float
 
 class Patient(Base):
     __tablename__ = "patients"
@@ -16,21 +16,22 @@ class Patient(Base):
 
 class Case(Base):
     __tablename__ = "cases"
-
-    risk_level = Column(String)
-    risk_score = Column(Integer)
-
+    
+    decision = Column(String)
+    argument_type = Column(String)
+    confidence = Column(String)
     id = Column(Integer, primary_key=True, index=True)
 
     patient_id = Column(String, ForeignKey("patients.id"))
     patient = relationship("Patient", back_populates="cases")
 
     created_at = Column(DateTime(timezone=True), server_default=func.now())
-
+    hospitalizations_last_90_days = Column(Integer)
     age = Column(Integer)
     walked_in = Column(String)
     ed_visits_last_year = Column(Integer)
     hospitalizations_last_year = Column(Integer)
+    hospitalizations_last_90_days = Column(Integer)
 
     fever = Column(Boolean)
     headache = Column(Boolean)
@@ -62,3 +63,12 @@ class Case(Base):
     malignancy = Column(Boolean)
     mets = Column(Boolean)
     hiv = Column(Boolean)
+    decision = Column(String)
+    argument_type = Column(String)
+    confidence = Column(Float)
+
+    supporting_rules = Column(JSON)
+    opposing_rules = Column(JSON)
+
+    hospitalization_score = Column(Integer)
+    discharge_score = Column(Integer)

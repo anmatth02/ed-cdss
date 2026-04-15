@@ -8,7 +8,7 @@ class CaseCreate(BaseModel):
     walked_in: str
     ed_visits_last_year: int
     hospitalizations_last_year: int
-
+    hospitalizations_last_90_days: int
     fever: bool
     headache: bool
     abdominal_pain: bool

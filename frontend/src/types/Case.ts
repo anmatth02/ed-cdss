@@ -3,12 +3,13 @@ export interface NewCaseForm {
   name?: string;
   age?: number;
   nationalId?: string;
-  
+
   // Visit Characteristics
   walkedIn: string;
   edVisitsLastYear?: number;
   hospitalizationsLastYear?: number;
-
+  hospitalizationsLast90Days: number;
+  
   // Symptoms
   fever?: boolean;
   headache?: boolean;
@@ -51,11 +52,22 @@ export interface NewCaseForm {
 export type CaseResult = {
   case_id: number;
   created_at: string;
-  triage_score: number;
-  heart_rate: number;
-  spo2: number;
-  risk_level: "LOW" | "MODERATE" | "HIGH";
-  risk_score: number;
-  rules_fired: string[];
-  input: any;
+
+  decision: "HOSPITALIZATION" | "DISCHARGE" | "DILEMMA";
+  argument_type: "PRIORITY" | "DEFEATER" | "DILEMMA";
+  confidence: number;
+
+  hospitalization_score: number;
+  discharge_score: number;
+
+  supporting_rules: string[];
+  opposing_rules: string[];
+
+  input: {
+    age?: number;
+    heart_rate?: number;
+    spo2?: number;
+    triage_score?: number;
+    [key: string]: unknown;
+  };
 };

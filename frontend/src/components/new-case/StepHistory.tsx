@@ -17,6 +17,7 @@ type Props = {
     walkedIn: string;
     edVisitsLastYear: number;
     hospitalizationsLastYear: number;
+    hospitalizationsLast90Days: number;
   }) => void;
 };
 
@@ -24,19 +25,21 @@ const StepHistory = ({ onNext, onBack, onChange }: Props) => {
   const [walkedIn, setWalkedIn] = useState("");
   const [edVisitsLastYear, setEdVisitsLastYear] = useState(0);
   const [hospitalizationsLastYear, setHospitalizationsLastYear] = useState(0);
+  const [hospitalizationsLast90Days, setHospitalizationsLast90Days] =
+    useState(0);
 
   const handleNext = () => {
     onChange({
       walkedIn,
       edVisitsLastYear,
       hospitalizationsLastYear,
+      hospitalizationsLast90Days
     });
     onNext();
   };
 
   return (
     <Box>
-
       <Typography variant="h6" sx={{ mb: 2 }}>
         Emergency Department History
       </Typography>
@@ -86,13 +89,29 @@ const StepHistory = ({ onNext, onBack, onChange }: Props) => {
         }}
       />
 
+      {/* hospitalizationsLast90Days */}
+      <TextField
+        label="Hospitalizations (Last 90 Days)"
+        type="number"
+        fullWidth
+        margin="normal"
+        value={
+          hospitalizationsLast90Days === 0 ? "" : hospitalizationsLast90Days
+        }
+        placeholder="e.g. 1"
+        helperText="Number of hospitalizations in the last 90 days"
+        onChange={(e) => {
+          const raw = e.target.value;
+          setHospitalizationsLast90Days(raw === "" ? 0 : Number(raw));
+        }}
+      />
+
       <Box sx={{ mt: 2 }}>
         <Button onClick={onBack}>Back</Button>
         <Button variant="contained" onClick={handleNext} sx={{ ml: 2 }}>
           Next
         </Button>
       </Box>
-
     </Box>
   );
 };

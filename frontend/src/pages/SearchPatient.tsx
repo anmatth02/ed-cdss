@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Container, Paper, TextField, Button, Typography } from "@mui/material";
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = "http://localhost:8000";
 
 type PatientSummary = {
   patient_id: string;

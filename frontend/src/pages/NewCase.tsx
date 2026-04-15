@@ -26,8 +26,8 @@ const steps = [
   "Result",
 ];
 
-const API_URL = import.meta.env.VITE_API_URL;
-
+const API_URL = "http://localhost:8000";
+console.log("API_URL =", API_URL);
 const NewCase = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [result, setResult] = useState<CaseResult | null>(null);
@@ -39,6 +39,7 @@ const NewCase = () => {
     walkedIn: "",
     edVisitsLastYear: 0,
     hospitalizationsLastYear: 0,
+    hospitalizationsLast90Days: 0,
     fever: false,
     headache: false,
     abdominalPain: false,
@@ -73,37 +74,35 @@ const NewCase = () => {
     setFormData((prev) => ({ ...prev, ...data }));
   };
 
-  const getRuleColor = (rule: string) => {
-    if (rule.includes("+3") || rule.includes("+2")) return "error.main";
-    return "warning.main";
-  };
-
   const next = () => setActiveStep((prev) => prev + 1);
 
   const back = () => setActiveStep((prev) => Math.max(prev - 1, 0));
-  const getRiskColor = (risk: string) => {
-    if (risk === "HIGH") return "error.main";
-    if (risk === "MODERATE") return "warning.main";
-    return "success.main";
+
+  const getDecisionColor = (decision: string) => {
+    if (decision === "HOSPITALIZATION") return "error.main";
+    if (decision === "DISCHARGE") return "success.main";
+    return "warning.main";
   };
 
-  const getRecommendation = (risk: string) => {
-    if (risk === "HIGH") return "Immediate physician evaluation recommended.";
+  const getRecommendation = (decision: string) => {
+    if (decision === "HOSPITALIZATION")
+      return "Patient should be admitted for further monitoring.";
 
-    if (risk === "MODERATE") return "Further diagnostic assessment advised.";
+    if (decision === "DISCHARGE")
+      return "Patient may be safely discharged with follow-up.";
 
-    return "Patient may be suitable for outpatient management.";
+    return "Case is unclear - clinical judgment required.";
   };
 
-  const getNextSteps = (risk: string) => {
-    if (risk === "HIGH")
+  const getNextSteps = (decision: string) => {
+    if (decision === "HOSPITALIZATION")
       return [
         "Perform ECG immediately",
         "Monitor vital signs continuously",
         "Consider urgent laboratory testing",
       ];
 
-    if (risk === "MODERATE")
+    if (decision === "DILEMMA")
       return [
         "Perform clinical reassessment",
         "Monitor patient condition",
@@ -115,7 +114,7 @@ const NewCase = () => {
 
   const handleSubmit = async () => {
     try {
-      // 1️⃣ Create Patien
+      // 1️⃣ Create Patient
       const patientRes = await fetch(`${API_URL}/cases/patients`, {
         method: "POST",
         headers: {
@@ -128,7 +127,9 @@ const NewCase = () => {
       });
 
       if (!patientRes.ok) {
-        throw new Error("Failed to create patient");
+        const errorText = await patientRes.text();
+        console.error("CASE ERROR RESPONSE:", errorText);
+        throw new Error(errorText);
       }
 
       const patientData = await patientRes.json();
@@ -146,6 +147,7 @@ const NewCase = () => {
           walked_in: formData.walkedIn,
           ed_visits_last_year: formData.edVisitsLastYear,
           hospitalizations_last_year: formData.hospitalizationsLastYear,
+          hospitalizations_last_90_days: formData.hospitalizationsLast90Days,
 
           fever: formData.fever,
           headache: formData.headache,
@@ -193,15 +195,15 @@ const NewCase = () => {
       setActiveStep(5);
     } catch (error) {
       console.error("Error saving case:", error);
-      alert("Error saving case ❌");
+      alert(`Error saving case ❌\n${String(error)}`);
     }
   };
 
   return (
     <Box sx={{ p: 3 }}>
-       <Typography variant="h4" fontWeight="bold" gutterBottom>
-          HospiGuide
-        </Typography>
+      <Typography variant="h4" fontWeight="bold" gutterBottom>
+        HospiGuide
+      </Typography>
       <Paper sx={{ p: 4, width: "90%", bgcolor: "#F7E3FA" }}>
         <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
           {steps.map((label) => (
@@ -244,45 +246,20 @@ const NewCase = () => {
                 mb: 3,
                 borderRadius: 2,
                 borderLeft: "6px solid",
-                borderColor: getRiskColor(result.risk_level),
+                borderColor: getDecisionColor(result.decision),
                 backgroundColor: "#ffffff",
               }}
             >
-              <Typography variant="h6">
-                Risk Level: {result.risk_level}
-              </Typography>
+              <Typography variant="h6">Decision: {result.decision}</Typography>
 
               <Typography color="text.secondary">
                 Clinical severity estimation based on patient data
               </Typography>
             </Box>
 
-            {/* Risk Score */}
-            <Typography sx={{ mb: 1 }}>
-              Clinical Risk Score: {result.risk_score} / 10
-            </Typography>
-
-            <LinearProgress
-              variant="determinate"
-              value={result.risk_score * 10}
-              sx={{ height: 12, borderRadius: 6, mb: 3 }}
-            />
-
             <Typography variant="h6" sx={{ mt: 3 }}>
               Decision Explanation
             </Typography>
-
-            <Box sx={{ bgcolor: "#fff4e5", p: 2, borderRadius: 2 }}>
-              {result.rules_fired?.length > 0 ? (
-                result.rules_fired.map((rule, i) => (
-                  <Typography key={i} sx={{ color: getRuleColor(rule) }}>
-                    🔥 {rule}
-                  </Typography>
-                ))
-              ) : (
-                <Typography>No rules triggered</Typography>
-              )}
-            </Box>
 
             <Typography variant="h6" sx={{ mt: 3 }}>
               Patient Data
@@ -292,7 +269,9 @@ const NewCase = () => {
               <Typography>Age: {result.input?.age}</Typography>
               <Typography>Heart Rate: {result.input?.heart_rate}</Typography>
               <Typography>SpO₂: {result.input?.spo2}</Typography>
-              <Typography>Triage Score: {result.input?.triage_score}</Typography>
+              <Typography>
+                Triage Score: {result.input?.triage_score}
+              </Typography>
             </Box>
             {/* Recommendation */}
             <Typography variant="h6" sx={{ mt: 2 }}>
@@ -300,13 +279,13 @@ const NewCase = () => {
             </Typography>
 
             <Typography sx={{ mb: 2 }}>
-              {getRecommendation(result.risk_level)}
+              {getRecommendation(result.decision)}
             </Typography>
 
             {/* Next Steps */}
             <Typography variant="h6">Suggested Next Steps</Typography>
 
-            {getNextSteps(result.risk_level).map((step, index) => (
+            {getNextSteps(result.decision).map((step, index) => (
               <Typography key={index}>• {step}</Typography>
             ))}
 
@@ -330,6 +309,62 @@ const NewCase = () => {
                 Start New Case
               </Button>
             </Box>
+
+            <Typography variant="h6" sx={{ mt: 3 }}>
+              Supporting Arguments
+            </Typography>
+
+            <Box sx={{ bgcolor: "#e8f5e9", p: 2, borderRadius: 2 }}>
+              {result.supporting_rules?.map((rule, i) => (
+                <Typography key={i}>✔ {rule}</Typography>
+              ))}
+            </Box>
+
+            <Typography variant="h6" sx={{ mt: 3 }}>
+              Opposing Arguments
+            </Typography>
+
+            <Box sx={{ bgcolor: "#ffebee", p: 2, borderRadius: 2 }}>
+              {result.opposing_rules?.map((rule, i) => (
+                <Typography key={i}>✖ {rule}</Typography>
+              ))}
+            </Box>
+
+            <Typography variant="h6" sx={{ mt: 3 }}>
+              Argumentation Type
+            </Typography>
+
+            <Typography>
+              {result.argument_type === "PRIORITY" &&
+                "Strong evidence supports this decision"}
+              {result.argument_type === "DEFEATER" &&
+                "Opposing arguments exist but are weaker"}
+              {result.argument_type === "DILEMMA" &&
+                "Conflicting evidence - physician judgment required"}
+            </Typography>
+
+            <Typography sx={{ mb: 1 }}>
+              Confidence: {Math.round(result.confidence * 100)}%
+            </Typography>
+
+            <LinearProgress
+              variant="determinate"
+              value={result.confidence * 100}
+              sx={{ height: 12, borderRadius: 6, mb: 3 }}
+            />
+{/* 
+            <Button
+              variant="outlined"
+              sx={{ mt: 2 }}
+              onClick={() => {
+                window.open(
+                  `${API_URL}/cases/${result.case_id}/report`,
+                  "_blank",
+                );
+              }}
+            >
+              Download PDF Report
+            </Button> */}
           </Paper>
         )}
       </Paper>
