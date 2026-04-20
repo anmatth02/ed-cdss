@@ -28,7 +28,11 @@ import {
   CartesianGrid,
 } from "recharts";
 
-const API_URL = "http://localhost:8000";
+// LOCAL URL
+// const API_URL = "http://localhost:8000";
+
+// LIVE URL
+const API_URL = import.meta.env.VITE_API_URL;
 
 type CaseType = {
   case_id: number;

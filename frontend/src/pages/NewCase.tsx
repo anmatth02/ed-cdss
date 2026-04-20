@@ -24,7 +24,12 @@ const steps = [
   "Result",
 ];
 
-const API_URL = "http://localhost:8000";
+// LOCAL URL
+// const API_URL = "http://localhost:8000";
+
+// LIVE URL
+const API_URL = import.meta.env.VITE_API_URL;
+
 console.log("API_URL =", API_URL);
 const NewCase = () => {
   const [activeStep, setActiveStep] = useState(0);
