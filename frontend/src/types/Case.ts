@@ -8,8 +8,8 @@ export interface NewCaseForm {
   walkedIn: string;
   edVisitsLastYear?: number;
   hospitalizationsLastYear?: number;
-  hospitalizationsLast90Days: number;
-  
+  hospitalizationsLast90Days?: number;
+
   // Symptoms
   fever?: boolean;
   headache?: boolean;
@@ -29,7 +29,7 @@ export interface NewCaseForm {
   // Triage
   triageScore?: number;
 
-  // Comorbidity Profile
+  // Comorbidities
   mi: boolean;
   chf: boolean;
   pvd: boolean;
@@ -49,8 +49,60 @@ export interface NewCaseForm {
   hiv: boolean;
 }
 
+export interface CaseInput {
+  // Demographics
+  name?: string;
+  age?: number;
+  national_id?: string;
+
+  // Visit Characteristics
+  walked_in?: string;
+  ed_visits_last_year?: number;
+  hospitalizations_last_year?: number;
+  hospitalizations_last_90_days?: number;
+
+  // Symptoms
+  fever?: boolean;
+  headache?: boolean;
+  abdominal_pain?: boolean;
+
+  // Pain
+  pain_scale?: number;
+
+  // Vitals
+  respiratory_rate?: number;
+  heart_rate?: number;
+  systolic_bp?: number;
+  diastolic_bp?: number;
+  spo2?: number;
+  temperature?: number;
+
+  // Triage
+  triage_score?: number;
+
+  // Comorbidities
+  mi?: boolean;
+  chf?: boolean;
+  pvd?: boolean;
+  cvd?: boolean;
+  dem?: boolean;
+  cpd?: boolean;
+  pud?: boolean;
+  rheu?: boolean;
+  liv1?: boolean;
+  liv2?: boolean;
+  dm1?: boolean;
+  dm2?: boolean;
+  paralysis?: boolean;
+  renal?: boolean;
+  malignancy?: boolean;
+  mets?: boolean;
+  hiv?: boolean;
+}
+
 export type CaseResult = {
   case_id: number;
+  patient_id?: string;
   created_at: string;
 
   decision: "HOSPITALIZATION" | "DISCHARGE" | "DILEMMA";
@@ -63,11 +115,7 @@ export type CaseResult = {
   supporting_rules: string[];
   opposing_rules: string[];
 
-  input: {
-    age?: number;
-    heart_rate?: number;
-    spo2?: number;
-    triage_score?: number;
-    [key: string]: unknown;
-  };
+  explanation_text: string;
+
+  input: CaseInput;
 };

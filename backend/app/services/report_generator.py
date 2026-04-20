@@ -19,13 +19,13 @@ def generate_case_report(case):
 
     content.append(Paragraph("Supporting Arguments:", styles["Heading2"]))
     for rule in case.supporting_rules or []:
-        content.append(Paragraph(f"✔ {rule}", styles["Normal"]))
+        content.append(Paragraph(f"- {rule}", styles["Normal"]))
 
     content.append(Spacer(1, 12))
 
     content.append(Paragraph("Opposing Arguments:", styles["Heading2"]))
     for rule in case.opposing_rules or []:
-        content.append(Paragraph(f"✖ {rule}", styles["Normal"]))
+        content.append(Paragraph(f"- {rule}", styles["Normal"]))
 
     content.append(Spacer(1, 12))
 

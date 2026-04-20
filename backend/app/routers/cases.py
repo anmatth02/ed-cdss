@@ -100,30 +100,103 @@ def create_case(data: CaseCreate, db: Session = Depends(get_db)):
     db.refresh(case)
 
     return {
-    "case_id": case.id,
-    "patient_id": case.patient_id,
-    "created_at": case.created_at,
+        "case_id": case.id,
+        "patient_id": case.patient_id,
+        "created_at": case.created_at,
 
-    "decision": result["decision"],
-    "argument_type": result["argument_type"],
-    "confidence": result["confidence"],
+        "decision": result["decision"],
+        "argument_type": result["argument_type"],
+        "confidence": result["confidence"],
+        
+        "explanation_text": result["explanation_text"],
 
-    "supporting_rules": result["supporting_rules"],
-    "opposing_rules": result["opposing_rules"],
-    "hospitalization_score": result["hospitalization_score"],
-    "discharge_score": result["discharge_score"],
-    "input": data.model_dump(exclude_none=True)
+        "supporting_rules": result["supporting_rules"],
+        "opposing_rules": result["opposing_rules"],
+        "hospitalization_score": result["hospitalization_score"],
+        "discharge_score": result["discharge_score"],
+        "input": data.model_dump(exclude_none=True)
 }
 
 # history end-point
 @router.get("/patients/{patient_id}/history")
 def get_patient_history(patient_id: str, db: Session = Depends(get_db)):
 
+    patient = db.query(Patient).filter(
+        Patient.id == patient_id
+    ).first()
+
+    if not patient:
+        return {"error": "Patient not found"}
+
     cases = db.query(Case).filter(
         Case.patient_id == patient_id
     ).order_by(Case.created_at.desc()).all()
 
-    return cases
+    formatted_cases = []
+
+    for c in cases:
+        formatted_cases.append({
+            "case_id": c.id,
+            "created_at": c.created_at,
+            "triage_score": c.triage_score,
+            "heart_rate": c.heart_rate,
+            "spo2": c.spo2,
+
+            "decision": c.decision,
+            "argument_type": c.argument_type,
+            "confidence": c.confidence,
+
+            "supporting_rules": c.supporting_rules or [],
+            "opposing_rules": c.opposing_rules or [],
+
+            "input": {
+                "age": c.age,
+                "walked_in": c.walked_in,
+                "ed_visits_last_year": c.ed_visits_last_year,
+                "hospitalizations_last_year": c.hospitalizations_last_year,
+                "hospitalizations_last_90_days": c.hospitalizations_last_90_days,
+
+                "fever": c.fever,
+                "headache": c.headache,
+                "abdominal_pain": c.abdominal_pain,
+                "pain_scale": c.pain_scale,
+
+                "respiratory_rate": c.respiratory_rate,
+                "heart_rate": c.heart_rate,
+                "systolic_bp": c.systolic_bp,
+                "diastolic_bp": c.diastolic_bp,
+                "spo2": c.spo2,
+                "temperature": c.temperature,
+                "triage_score": c.triage_score,
+
+                "mi": c.mi,
+                "chf": c.chf,
+                "pvd": c.pvd,
+                "cvd": c.cvd,
+                "dem": c.dem,
+                "cpd": c.cpd,
+                "pud": c.pud,
+                "rheu": c.rheu,
+                "liv1": c.liv1,
+                "liv2": c.liv2,
+                "dm1": c.dm1,
+                "dm2": c.dm2,
+                "paralysis": c.paralysis,
+                "renal": c.renal,
+                "malignancy": c.malignancy,
+                "mets": c.mets,
+                "hiv": c.hiv,
+            }
+        })
+
+    return {
+        "patient": {
+            "name": patient.name,
+            "national_id": patient.national_id
+        },
+        "total_visits": len(formatted_cases),
+        "cases": formatted_cases
+    }
 
 # history
 @router.get("/patients/{patient_id}/summary")
@@ -190,32 +263,74 @@ def get_history_by_national_id(national_id: str, db: Session = Depends(get_db)):
     ).order_by(Case.created_at.desc()).all()
 
     return {
-    "patient": {
-        "name": patient.name,
-        "national_id": patient.national_id
-    },
-    "total_visits": len(cases),
-    "cases": [
-    {
-        "case_id": c.id,
-        "created_at": c.created_at,
+        "patient": {
+            "name": patient.name,
+            "national_id": patient.national_id
+        },
 
-        "decision": c.decision,
-        "argument_type": c.argument_type,
-        "confidence": c.confidence,
+        "total_visits": len(cases),
 
-        "supporting_rules": c.supporting_rules,
-        "opposing_rules": c.opposing_rules,
+        "cases": [
+            {
+                "case_id": c.id,
+                "created_at": c.created_at,
 
-        "hospitalization_score": c.hospitalization_score,
-        "discharge_score": c.discharge_score,
+                "decision": c.decision,
+                "argument_type": c.argument_type,
+                "confidence": c.confidence,
 
-        "triage_score": c.triage_score,
-        "heart_rate": c.heart_rate,
-        "spo2": c.spo2
+                "supporting_rules": c.supporting_rules or [],
+                "opposing_rules": c.opposing_rules or [],
+
+                "hospitalization_score": c.hospitalization_score,
+                "discharge_score": c.discharge_score,
+
+                "triage_score": c.triage_score,
+                "heart_rate": c.heart_rate,
+                "spo2": c.spo2,
+
+                "input": {
+                    "age": c.age,
+                    "walked_in": c.walked_in,
+                    "ed_visits_last_year": c.ed_visits_last_year,
+                    "hospitalizations_last_year": c.hospitalizations_last_year,
+                    "hospitalizations_last_90_days": c.hospitalizations_last_90_days,
+
+                    "fever": c.fever,
+                    "headache": c.headache,
+                    "abdominal_pain": c.abdominal_pain,
+
+                    "pain_scale": c.pain_scale,
+
+                    "respiratory_rate": c.respiratory_rate,
+                    "heart_rate": c.heart_rate,
+                    "systolic_bp": c.systolic_bp,
+                    "diastolic_bp": c.diastolic_bp,
+                    "spo2": c.spo2,
+                    "temperature": c.temperature,
+
+                    "triage_score": c.triage_score,
+
+                    "mi": c.mi,
+                    "chf": c.chf,
+                    "pvd": c.pvd,
+                    "cvd": c.cvd,
+                    "dem": c.dem,
+                    "cpd": c.cpd,
+                    "pud": c.pud,
+                    "rheu": c.rheu,
+                    "liv1": c.liv1,
+                    "liv2": c.liv2,
+                    "dm1": c.dm1,
+                    "dm2": c.dm2,
+                    "paralysis": c.paralysis,
+                    "renal": c.renal,
+                    "malignancy": c.malignancy,
+                    "mets": c.mets,
+                    "hiv": c.hiv
+                }
+            }
+            for c in cases
+        ]
     }
-    for c in cases
-]    
-}
-    
     

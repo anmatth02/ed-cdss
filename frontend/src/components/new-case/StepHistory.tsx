@@ -15,18 +15,18 @@ type Props = {
   onBack: () => void;
   onChange: (data: {
     walkedIn: string;
-    edVisitsLastYear: number;
-    hospitalizationsLastYear: number;
-    hospitalizationsLast90Days: number;
+    edVisitsLastYear?: number;
+    hospitalizationsLastYear?: number;
+    hospitalizationsLast90Days?: number;
   }) => void;
 };
 
 const StepHistory = ({ onNext, onBack, onChange }: Props) => {
   const [walkedIn, setWalkedIn] = useState("");
-  const [edVisitsLastYear, setEdVisitsLastYear] = useState(0);
-  const [hospitalizationsLastYear, setHospitalizationsLastYear] = useState(0);
+  const [edVisitsLastYear, setEdVisitsLastYear] = useState<number | undefined>(undefined);
+  const [hospitalizationsLastYear, setHospitalizationsLastYear] = useState<number | undefined>(undefined);
   const [hospitalizationsLast90Days, setHospitalizationsLast90Days] =
-    useState(0);
+    useState<number | undefined>(undefined);
 
   const handleNext = () => {
     onChange({
@@ -37,6 +37,8 @@ const StepHistory = ({ onNext, onBack, onChange }: Props) => {
     });
     onNext();
   };
+
+  const asDisplayValue = (v?: number) => v ?? "";
 
   return (
     <Box>
@@ -65,12 +67,12 @@ const StepHistory = ({ onNext, onBack, onChange }: Props) => {
         type="number"
         fullWidth
         margin="normal"
-        value={edVisitsLastYear === 0 ? "" : edVisitsLastYear}
+        value={asDisplayValue(edVisitsLastYear)}
         placeholder="e.g. 2"
         helperText="Number of emergency visits in the past year"
         onChange={(e) => {
           const raw = e.target.value;
-          setEdVisitsLastYear(raw === "" ? 0 : Number(raw));
+          setEdVisitsLastYear(raw === "" ? undefined : Number(raw));
         }}
       />
 
@@ -80,12 +82,12 @@ const StepHistory = ({ onNext, onBack, onChange }: Props) => {
         type="number"
         fullWidth
         margin="normal"
-        value={hospitalizationsLastYear === 0 ? "" : hospitalizationsLastYear}
+        value={asDisplayValue(hospitalizationsLastYear)}
         placeholder="e.g. 1"
         helperText="Number of inpatient admissions in the past year"
         onChange={(e) => {
           const raw = e.target.value;
-          setHospitalizationsLastYear(raw === "" ? 0 : Number(raw));
+          setHospitalizationsLastYear(raw === "" ? undefined : Number(raw));
         }}
       />
 
@@ -95,14 +97,12 @@ const StepHistory = ({ onNext, onBack, onChange }: Props) => {
         type="number"
         fullWidth
         margin="normal"
-        value={
-          hospitalizationsLast90Days === 0 ? "" : hospitalizationsLast90Days
-        }
+        value={asDisplayValue(hospitalizationsLast90Days)}
         placeholder="e.g. 1"
         helperText="Number of hospitalizations in the last 90 days"
         onChange={(e) => {
           const raw = e.target.value;
-          setHospitalizationsLast90Days(raw === "" ? 0 : Number(raw));
+          setHospitalizationsLast90Days(raw === "" ? undefined : Number(raw));
         }}
       />
 

@@ -54,15 +54,19 @@ const StepReview = ({ data, onBack, onSubmit }: Props) => {
         <Divider sx={{ mb: 2 }} />
 
         <Typography>
-          Mode of Arrival: {data.walkedIn || "—"}
+          Mode of Arrival: {data.walkedIn || "-"}
         </Typography>
 
         <Typography>
-          ED Visits (Last Year): {data.edVisitsLastYear || "—"}
+          ED Visits (Last Year): {data.edVisitsLastYear || "-"}
         </Typography>
 
         <Typography>
-          Hospitalizations (Last Year): {data.hospitalizationsLastYear || "—"}
+          Hospitalizations (Last Year): {data.hospitalizationsLastYear || "-"}
+        </Typography>
+
+         <Typography>
+          Hospitalizations Last 90 Days: {data.hospitalizationsLast90Days || "-"}
         </Typography>
       </Paper>
 

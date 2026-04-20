@@ -38,7 +38,6 @@ def categorize_walk_in(walked_in: str) -> int:
         return 1
     return 0
 
-
 def categorize_hosp_365d(n: int) -> int:
     if n <= 0:
         return 0
@@ -49,7 +48,6 @@ def categorize_hosp_365d(n: int) -> int:
     if 4 <= n <= 10:
         return 3
     return 4
-
 
 def categorize_hosp_90d(n: int) -> int:
     if n <= 0:
@@ -159,7 +157,6 @@ def compute_cci(data) -> int:
 
     return score
 
-
 def categorize_cci(cci: int) -> int:
     if cci == 0:
         return 0
@@ -168,7 +165,6 @@ def categorize_cci(cci: int) -> int:
     if 4 <= cci <= 6:
         return 2
     return 3
-
 
 def compute_news(data) -> int:
     r = int(getattr(data, "respiratory_rate", 0))

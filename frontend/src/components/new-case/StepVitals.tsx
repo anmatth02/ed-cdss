@@ -17,21 +17,33 @@ type Props = {
   onChange: (data: Partial<NewCaseForm>) => void;
 };
 
-const asDisplayValue = (v: number) => (v === 0 ? "" : v);
+const asDisplayValue = (v?: number) => v ?? "";
 
 const StepVitals = ({ onNext, onBack, onChange }: Props) => {
-  const [local, setLocal] = useState({
+  const [local, setLocal] = useState<{
+    fever?: boolean;
+    headache?: boolean;
+    abdominalPain?: boolean;
+    painScale?: number;
+    respiratoryRate?: number;
+    heartRate?: number;
+    systolicBP?: number;
+    diastolicBP?: number;
+    spo2?: number;
+    temperature?: number;
+    triageScore?: number;
+  }>({
     fever: false,
     headache: false,
     abdominalPain: false,
     painScale: 0,
-    respiratoryRate: 0,
-    heartRate: 0,
-    systolicBP: 0,
-    diastolicBP: 0,
-    spo2: 0,
-    temperature: 0,
-    triageScore: 0,
+    respiratoryRate: undefined,
+    heartRate: undefined,
+    systolicBP: undefined,
+    diastolicBP: undefined,
+    spo2: undefined,
+    temperature: undefined,
+    triageScore: undefined,
   });
 
   const handleNext = () => {
@@ -203,14 +215,21 @@ const StepVitals = ({ onNext, onBack, onChange }: Props) => {
         type="number"
         fullWidth
         margin="normal"
-        value={asDisplayValue(local.triageScore)}
+        value={local.triageScore ?? ""}
         placeholder="0–4"
-        helperText="0 = Resuscitation, 1 = Emergent, 2 = Urgent, 3 = Less Urgent, 4 = Non-Urgent"
+        helperText="0 = Non-Urgent, 1 = Less Urgent, 2 = Urgent, 3 = Emergent, 4 = Resuscitation"
         onChange={(e) => {
           const raw = e.target.value;
-          setLocal({ ...local, triageScore: raw === "" ? 0 : Number(raw) });
+
+          setLocal({
+            ...local,
+            triageScore: raw === "" ? undefined : Number(raw),
+          });
         }}
-        inputProps={{ min: 0, max: 4 }}
+        inputProps={{
+          min: 0,
+          max: 4,
+        }}
         InputProps={{
           endAdornment: <InputAdornment position="end">/4</InputAdornment>,
         }}

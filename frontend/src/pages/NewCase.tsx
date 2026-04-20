@@ -4,10 +4,7 @@ import {
   StepLabel,
   Paper,
   Typography,
-  LinearProgress,
   Box,
-  Button,
-  Divider,
 } from "@mui/material";
 import { useState } from "react";
 import StepPatientInfo from "../components/new-case/StepPatientInfo";
@@ -16,6 +13,7 @@ import type { CaseResult, NewCaseForm } from "../types/Case";
 import StepVitals from "../components/new-case/StepVitals";
 import StepComorbidities from "../components/new-case/StepComorbidities";
 import StepReview from "../components/new-case/StepReview";
+import ClinicalDecisionCard from "../components/results/ClinicalDecisionCard";
 
 const steps = [
   "Demographics",
@@ -37,9 +35,9 @@ const NewCase = () => {
     age: 0,
     nationalId: "",
     walkedIn: "",
-    edVisitsLastYear: 0,
-    hospitalizationsLastYear: 0,
-    hospitalizationsLast90Days: 0,
+    edVisitsLastYear: undefined,
+    hospitalizationsLastYear: undefined,
+    hospitalizationsLast90Days: undefined,
     fever: false,
     headache: false,
     abdominalPain: false,
@@ -78,39 +76,39 @@ const NewCase = () => {
 
   const back = () => setActiveStep((prev) => Math.max(prev - 1, 0));
 
-  const getDecisionColor = (decision: string) => {
-    if (decision === "HOSPITALIZATION") return "error.main";
-    if (decision === "DISCHARGE") return "success.main";
-    return "warning.main";
-  };
+  // const getDecisionColor = (decision: string) => {
+  //   if (decision === "HOSPITALIZATION") return "error.main";
+  //   if (decision === "DISCHARGE") return "success.main";
+  //   return "warning.main";
+  // };
 
-  const getRecommendation = (decision: string) => {
-    if (decision === "HOSPITALIZATION")
-      return "Patient should be admitted for further monitoring.";
+  // const getRecommendation = (decision: string) => {
+  //   if (decision === "HOSPITALIZATION")
+  //     return "Patient should be admitted for further monitoring.";
 
-    if (decision === "DISCHARGE")
-      return "Patient may be safely discharged with follow-up.";
+  //   if (decision === "DISCHARGE")
+  //     return "Patient may be safely discharged with follow-up.";
 
-    return "Case is unclear - clinical judgment required.";
-  };
+  //   return "Case is unclear - clinical judgment required.";
+  // };
 
-  const getNextSteps = (decision: string) => {
-    if (decision === "HOSPITALIZATION")
-      return [
-        "Perform ECG immediately",
-        "Monitor vital signs continuously",
-        "Consider urgent laboratory testing",
-      ];
+  // const getNextSteps = (decision: string) => {
+  //   if (decision === "HOSPITALIZATION")
+  //     return [
+  //       "Perform ECG immediately",
+  //       "Monitor vital signs continuously",
+  //       "Consider urgent laboratory testing",
+  //     ];
 
-    if (decision === "DILEMMA")
-      return [
-        "Perform clinical reassessment",
-        "Monitor patient condition",
-        "Consider diagnostic imaging",
-      ];
+  //   if (decision === "DILEMMA")
+  //     return [
+  //       "Perform clinical reassessment",
+  //       "Monitor patient condition",
+  //       "Consider diagnostic imaging",
+  //     ];
 
-    return ["Routine monitoring", "Outpatient follow-up recommended"];
-  };
+  //   return ["Routine monitoring", "Outpatient follow-up recommended"];
+  // };
 
   const handleSubmit = async () => {
     try {
@@ -234,138 +232,14 @@ const NewCase = () => {
         )}
 
         {activeStep === 5 && result && (
-          <Paper sx={{ mt: 3, p: 4 }}>
-            <Typography variant="h5" sx={{ mb: 3 }}>
-              Clinical Decision Report
-            </Typography>
-
-            {/* Risk Panel */}
-            <Box
-              sx={{
-                p: 2,
-                mb: 3,
-                borderRadius: 2,
-                borderLeft: "6px solid",
-                borderColor: getDecisionColor(result.decision),
-                backgroundColor: "#ffffff",
-              }}
-            >
-              <Typography variant="h6">Decision: {result.decision}</Typography>
-
-              <Typography color="text.secondary">
-                Clinical severity estimation based on patient data
-              </Typography>
-            </Box>
-
-            <Typography variant="h6" sx={{ mt: 3 }}>
-              Decision Explanation
-            </Typography>
-
-            <Typography variant="h6" sx={{ mt: 3 }}>
-              Patient Data
-            </Typography>
-
-            <Box sx={{ bgcolor: "#f5f5f5", p: 2, borderRadius: 2 }}>
-              <Typography>Age: {result.input?.age}</Typography>
-              <Typography>Heart Rate: {result.input?.heart_rate}</Typography>
-              <Typography>SpO₂: {result.input?.spo2}</Typography>
-              <Typography>
-                Triage Score: {result.input?.triage_score}
-              </Typography>
-            </Box>
-            {/* Recommendation */}
-            <Typography variant="h6" sx={{ mt: 2 }}>
-              Recommendation
-            </Typography>
-
-            <Typography sx={{ mb: 2 }}>
-              {getRecommendation(result.decision)}
-            </Typography>
-
-            {/* Next Steps */}
-            <Typography variant="h6">Suggested Next Steps</Typography>
-
-            {getNextSteps(result.decision).map((step, index) => (
-              <Typography key={index}>• {step}</Typography>
-            ))}
-
-            {/* Case info */}
-            <Divider sx={{ my: 3 }} />
-
-            <Typography>Case ID: {result.case_id}</Typography>
-
-            <Typography>
-              Created: {new Date(result.created_at).toLocaleString("en-GB")}
-            </Typography>
-
-            <Box sx={{ mt: 3 }}>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  setActiveStep(0);
-                  setResult(null);
-                }}
-              >
-                Start New Case
-              </Button>
-            </Box>
-
-            <Typography variant="h6" sx={{ mt: 3 }}>
-              Supporting Arguments
-            </Typography>
-
-            <Box sx={{ bgcolor: "#e8f5e9", p: 2, borderRadius: 2 }}>
-              {result.supporting_rules?.map((rule, i) => (
-                <Typography key={i}>✔ {rule}</Typography>
-              ))}
-            </Box>
-
-            <Typography variant="h6" sx={{ mt: 3 }}>
-              Opposing Arguments
-            </Typography>
-
-            <Box sx={{ bgcolor: "#ffebee", p: 2, borderRadius: 2 }}>
-              {result.opposing_rules?.map((rule, i) => (
-                <Typography key={i}>✖ {rule}</Typography>
-              ))}
-            </Box>
-
-            <Typography variant="h6" sx={{ mt: 3 }}>
-              Argumentation Type
-            </Typography>
-
-            <Typography>
-              {result.argument_type === "PRIORITY" &&
-                "Strong evidence supports this decision"}
-              {result.argument_type === "DEFEATER" &&
-                "Opposing arguments exist but are weaker"}
-              {result.argument_type === "DILEMMA" &&
-                "Conflicting evidence - physician judgment required"}
-            </Typography>
-
-            <Typography sx={{ mb: 1 }}>
-              Confidence: {Math.round(result.confidence * 100)}%
-            </Typography>
-
-            <LinearProgress
-              variant="determinate"
-              value={result.confidence * 100}
-              sx={{ height: 12, borderRadius: 6, mb: 3 }}
-            />
-{/* 
-            <Button
-              variant="outlined"
-              sx={{ mt: 2 }}
-              onClick={() => {
-                window.open(
-                  `${API_URL}/cases/${result.case_id}/report`,
-                  "_blank",
-                );
-              }}
-            >
-              Download PDF Report
-            </Button> */}
-          </Paper>
+          <ClinicalDecisionCard
+            result={result}
+            formData={formData}
+            onStartNewCase={() => {
+              setActiveStep(0);
+              setResult(null);
+            }}
+          />
         )}
       </Paper>
     </Box>
