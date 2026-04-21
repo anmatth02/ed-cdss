@@ -16,17 +16,14 @@ class Patient(Base):
 
 class Case(Base):
     __tablename__ = "cases"
-    
-    decision = Column(String)
-    argument_type = Column(String)
-    confidence = Column(String)
+
     id = Column(Integer, primary_key=True, index=True)
 
     patient_id = Column(String, ForeignKey("patients.id"))
     patient = relationship("Patient", back_populates="cases")
 
     created_at = Column(DateTime(timezone=True), server_default=func.now())
-    hospitalizations_last_90_days = Column(Integer)
+
     age = Column(Integer)
     walked_in = Column(String)
     ed_visits_last_year = Column(Integer)
@@ -44,7 +41,7 @@ class Case(Base):
     systolic_bp = Column(Integer)
     diastolic_bp = Column(Integer)
     spo2 = Column(Integer)
-    temperature = Column(Integer)
+    temperature = Column(Float)
 
     mi = Column(Boolean)
     chf = Column(Boolean)
@@ -63,6 +60,7 @@ class Case(Base):
     malignancy = Column(Boolean)
     mets = Column(Boolean)
     hiv = Column(Boolean)
+
     decision = Column(String)
     argument_type = Column(String)
     confidence = Column(Float)

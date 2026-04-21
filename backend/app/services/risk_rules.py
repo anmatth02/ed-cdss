@@ -149,15 +149,30 @@ def evaluate_decision(data):
     # FINAL DECISION
     # =====================================================
 
+    # total = h_score + d_score + 0.00001
+    # confidence = max(h_score, d_score) / total
+
+    # if h_score > d_score:
+    #     decision = "HOSPITALIZATION"
+    # elif d_score > h_score:
+    #     decision = "DISCHARGE"
+    # else:
+    #     decision = "DILEMMA"
+    diff = abs(h_score - d_score)
     total = h_score + d_score + 0.00001
     confidence = max(h_score, d_score) / total
 
-    if h_score > d_score:
-        decision = "HOSPITALIZATION"
-    elif d_score > h_score:
-        decision = "DISCHARGE"
-    else:
+    if diff <= 1:
         decision = "DILEMMA"
+
+    elif confidence < 0.58:
+        decision = "DILEMMA"
+
+    elif h_score > d_score:
+        decision = "HOSPITALIZATION"
+
+    else:
+        decision = "DISCHARGE"
 
     # =====================================================
     # ARGUMENT TYPE
