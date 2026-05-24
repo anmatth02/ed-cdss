@@ -12,8 +12,9 @@ import {
 const CaseResult = () => {
   const location = useLocation();
   const result = location.state;
-  console.log(result);
+  console.log("result ",result);
   if (!result) return <div>No result available</div>;
+  const { derived_features } = result;
 
   const getColor = (decision: string) => {
     if (decision === "HOSPITALIZATION") return "error";
@@ -45,7 +46,42 @@ const CaseResult = () => {
         <Typography variant="h6" sx={{ mt: 3 }}>
           Argumentation Type
         </Typography>
+        <Paper sx={{ p: 3, mt: 3 }}>
+          <Typography variant="h6">Risk Scores</Typography>
+          <Divider sx={{ mb: 2 }} />
 
+          <Typography>
+            NEWS: <b>{derived_features.news_raw}</b> (
+            {derived_features.news_cat === 0
+              ? "Low"
+              : derived_features.news_cat === 1
+                ? "Medium"
+                : "High"}
+            )
+          </Typography>
+
+          <Typography>
+            CART: <b>{derived_features.cart_raw}</b> (
+            {derived_features.cart_cat === 0
+              ? "Low"
+              : derived_features.cart_cat === 1
+                ? "Moderate"
+                : "High"}
+            )
+          </Typography>
+
+          <Typography>
+            CCI: <b>{derived_features.cci_raw}</b> (
+            {derived_features.cci_cat === 0
+              ? "None"
+              : derived_features.cci_cat === 1
+                ? "Mild"
+                : derived_features.cci_cat === 2
+                  ? "Moderate"
+                  : "Severe"}
+            )
+          </Typography>
+        </Paper>
         <Chip
           label={result.argument_type}
           color={
@@ -97,7 +133,7 @@ const CaseResult = () => {
             <Typography>No supporting factors identified.</Typography>
           )}
         </Box>
-        
+
         {/* Opposing */}
         <Typography variant="h6" gutterBottom color="error.main" sx={{ mt: 3 }}>
           <b>Opposing Arguments</b>

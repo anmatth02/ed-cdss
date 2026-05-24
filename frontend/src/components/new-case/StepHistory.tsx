@@ -41,32 +41,78 @@ const StepHistory = ({ onNext, onBack, onChange }: Props) => {
   const asDisplayValue = (v?: number) => v ?? "";
 
   return (
-    <Box>
-      <Typography variant="h6" sx={{ mb: 2 }}>
-        Emergency Department History
-      </Typography>
+  <Box
+    sx={{
+      maxWidth: "1000px",
+      mx: "auto",
+      background: "#ffffff",
+      p: 5,
+      borderRadius: 4,
+      boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
+    }}
+  >
+    <Typography
+      variant="h5"
+      sx={{
+        mb: 4,
+        fontWeight: 700,
+        color: "#1e293b",
+      }}
+    >
+      Emergency Department History
+    </Typography>
 
-      {/* Mode of Arrival */}
-      <FormLabel sx={{ mt: 2 }}>Mode of Arrival</FormLabel>
+    {/* Mode of Arrival */}
+    <FormLabel
+      sx={{
+        fontWeight: 600,
+        color: "#334155",
+      }}
+    >
+      Mode of Arrival
+    </FormLabel>
+
+    <Box
+      sx={{
+        display: "flex",
+        gap: 3,
+        mt: 1,
+        mb: 4,
+      }}
+    >
       <RadioGroup
         row
         value={walkedIn}
         onChange={(e) => setWalkedIn(e.target.value)}
       >
-        <FormControlLabel value="Yes" control={<Radio />} label="Walked In" />
+        <FormControlLabel
+          value="Yes"
+          control={<Radio />}
+          label="Walked In"
+        />
+
         <FormControlLabel
           value="No"
           control={<Radio />}
           label="Ambulance / Other"
         />
       </RadioGroup>
+    </Box>
 
-      {/* ED Visits */}
+    {/* Inputs */}
+    <Box
+      sx={{
+        display: "grid",
+        gridTemplateColumns: {
+          xs: "1fr",
+          md: "1fr 1fr",
+        },
+        gap: 3,
+      }}
+    >
       <TextField
         label="ED Visits (Last 12 Months)"
         type="number"
-        fullWidth
-        margin="normal"
         value={asDisplayValue(edVisitsLastYear)}
         placeholder="e.g. 2"
         helperText="Number of emergency visits in the past year"
@@ -74,46 +120,96 @@ const StepHistory = ({ onNext, onBack, onChange }: Props) => {
           const raw = e.target.value;
           setEdVisitsLastYear(raw === "" ? undefined : Number(raw));
         }}
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            borderRadius: 3,
+            background: "#fff",
+            height: 56,
+          },
+        }}
       />
 
-      {/* Hospitalizations */}
       <TextField
         label="Hospitalizations (Last 12 Months)"
         type="number"
-        fullWidth
-        margin="normal"
         value={asDisplayValue(hospitalizationsLastYear)}
         placeholder="e.g. 1"
         helperText="Number of inpatient admissions in the past year"
         onChange={(e) => {
           const raw = e.target.value;
-          setHospitalizationsLastYear(raw === "" ? undefined : Number(raw));
+          setHospitalizationsLastYear(
+            raw === "" ? undefined : Number(raw)
+          );
+        }}
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            borderRadius: 3,
+            background: "#fff",
+            height: 56,
+          },
         }}
       />
 
-      {/* hospitalizationsLast90Days */}
       <TextField
         label="Hospitalizations (Last 90 Days)"
         type="number"
-        fullWidth
-        margin="normal"
         value={asDisplayValue(hospitalizationsLast90Days)}
         placeholder="e.g. 1"
         helperText="Number of hospitalizations in the last 90 days"
         onChange={(e) => {
           const raw = e.target.value;
-          setHospitalizationsLast90Days(raw === "" ? undefined : Number(raw));
+          setHospitalizationsLast90Days(
+            raw === "" ? undefined : Number(raw)
+          );
+        }}
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            borderRadius: 3,
+            background: "#fff",
+            height: 56,
+          },
         }}
       />
-
-      <Box sx={{ mt: 2 }}>
-        <Button onClick={onBack}>Back</Button>
-        <Button variant="contained" onClick={handleNext} sx={{ ml: 2 }}>
-          Next
-        </Button>
-      </Box>
     </Box>
-  );
+
+    {/* Buttons */}
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        mt: 5,
+      }}
+    >
+      <Button
+        variant="outlined"
+        size="large"
+        onClick={onBack}
+        sx={{
+          borderRadius: 3,
+          px: 4,
+          textTransform: "none",
+          fontWeight: 600,
+        }}
+      >
+        Back
+      </Button>
+
+      <Button
+        variant="contained"
+        size="large"
+        onClick={handleNext}
+        sx={{
+          borderRadius: 3,
+          px: 5,
+          fontWeight: 700,
+          textTransform: "none",
+        }}
+      >
+        Next
+      </Button>
+    </Box>
+  </Box>
+);
 };
 
 export default StepHistory;

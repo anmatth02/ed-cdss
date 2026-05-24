@@ -50,43 +50,98 @@ const StepComorbidities = ({ onNext, onBack, onChange }: Props) => {
   };
 
   return (
-    <Box>
-      <Typography variant="h5" sx={{ mb: 3 }}>
+    <Box
+      sx={{
+        maxWidth: "1200px",
+        mx: "auto",
+        background: "#ffffff",
+        p: 5,
+        borderRadius: 4,
+        boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
+      }}
+    >
+      <Typography
+        variant="h5"
+        sx={{
+          mb: 4,
+          fontWeight: 700,
+          color: "#1e293b",
+        }}
+      >
         Comorbidities (CCI)
       </Typography>
 
       <Box
         sx={{
-          display: "flex",
-          flexWrap: "wrap",
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "1fr",
+            md: "1fr 1fr",
+            lg: "1fr 1fr 1fr",
+          },
           gap: 3,
         }}
       >
         <Box sx={{ flex: "1 1 300px" }}>
-          <Paper sx={{ p: 2 }}>
-            <Typography variant="subtitle1" sx={{ mb: 1 }}>
+          <Paper
+            sx={{
+              p: 3,
+              borderRadius: 4,
+              border: "1px solid #e2e8f0",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+              height: "100%",
+            }}
+          >
+            <Typography
+              variant="subtitle1"
+              sx={{
+                mb: 2,
+                fontWeight: 700,
+                color: "#334155",
+              }}
+            >
               Cardiovascular
             </Typography>
 
             <FormControlLabel
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                mb: 1,
+              }}
               control={
                 <Checkbox checked={local.mi} onChange={() => toggle("mi")} />
               }
               label="Myocardial Infarction"
             />
             <FormControlLabel
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                mb: 1,
+              }}
               control={
                 <Checkbox checked={local.chf} onChange={() => toggle("chf")} />
               }
               label="Heart Failure"
             />
             <FormControlLabel
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                mb: 1,
+              }}
               control={
                 <Checkbox checked={local.pvd} onChange={() => toggle("pvd")} />
               }
               label="Peripheral Vascular"
             />
             <FormControlLabel
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                mb: 1,
+              }}
               control={
                 <Checkbox checked={local.cvd} onChange={() => toggle("cvd")} />
               }
@@ -96,8 +151,23 @@ const StepComorbidities = ({ onNext, onBack, onChange }: Props) => {
         </Box>
 
         <Box sx={{ flex: "1 1 300px" }}>
-          <Paper sx={{ p: 2 }}>
-            <Typography variant="subtitle1" sx={{ mb: 1 }}>
+          <Paper
+            sx={{
+              p: 3,
+              borderRadius: 4,
+              border: "1px solid #e2e8f0",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+              height: "100%",
+            }}
+          >
+            <Typography
+              variant="subtitle1"
+              sx={{
+                mb: 2,
+                fontWeight: 700,
+                color: "#334155",
+              }}
+            >
               Pulmonary / Neuro
             </Typography>
 
@@ -126,8 +196,23 @@ const StepComorbidities = ({ onNext, onBack, onChange }: Props) => {
         </Box>
 
         <Box sx={{ flex: "1 1 300px" }}>
-          <Paper sx={{ p: 2 }}>
-            <Typography variant="subtitle1" sx={{ mb: 1 }}>
+          <Paper
+            sx={{
+              p: 3,
+              borderRadius: 4,
+              border: "1px solid #e2e8f0",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+              height: "100%",
+            }}
+          >
+            <Typography
+              variant="subtitle1"
+              sx={{
+                mb: 2,
+                fontWeight: 700,
+                color: "#334155",
+              }}
+            >
               Metabolic / Oncology
             </Typography>
 
@@ -180,11 +265,36 @@ const StepComorbidities = ({ onNext, onBack, onChange }: Props) => {
         </Box>
       </Box>
 
-      <Box sx={{ mt: 4 }}>
-        <Button onClick={onBack} sx={{ mr: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          mt: 5,
+        }}
+      >
+        <Button
+          variant="outlined"
+          onClick={onBack}
+          sx={{
+            borderRadius: 3,
+            px: 4,
+            textTransform: "none",
+            fontWeight: 600,
+          }}
+        >
           Back
         </Button>
-        <Button variant="contained" onClick={handleNext}>
+
+        <Button
+          variant="contained"
+          onClick={handleNext}
+          sx={{
+            borderRadius: 3,
+            px: 5,
+            fontWeight: 700,
+            textTransform: "none",
+          }}
+        >
           Next
         </Button>
       </Box>

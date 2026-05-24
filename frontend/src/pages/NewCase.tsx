@@ -192,8 +192,6 @@ const NewCase = () => {
 
       const caseData = await caseRes.json();
 
-      console.log("Saved case:", caseData);
-
       setResult(caseData);
       setActiveStep(5);
     } catch (error) {
@@ -207,7 +205,7 @@ const NewCase = () => {
       <Typography variant="h4" fontWeight="bold" gutterBottom>
         HospiGuide
       </Typography>
-      <Paper sx={{ p: 4, width: "90%", bgcolor: "#F7E3FA" }}>
+      <Paper sx={{ p: 4, width: "90%", bgcolor: "#fcf6fd" }}>
         <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
           {steps.map((label) => (
             <Step key={label}>

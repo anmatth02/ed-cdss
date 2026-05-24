@@ -140,6 +140,8 @@ def create_case(data: CaseCreate, db: Session = Depends(get_db)):
             "discharge_score": case.discharge_score,
 
             "input": data.model_dump(exclude_none=True),
+            
+            "derived_features": result["derived_features"],
         }
 
     except Exception as e:

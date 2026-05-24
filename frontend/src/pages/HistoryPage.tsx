@@ -100,7 +100,15 @@ const HistoryPage = () => {
         HospiGuide
       </Typography>
 
-      <Paper sx={{ p: 4, borderRadius: 3, bgcolor: "#F7E3FA" }}>
+      <Paper
+        sx={{
+          p: 4,
+          borderRadius: 5,
+          bgcolor: "#fcf7fd",
+          border: "1px solid #eadcf0",
+          boxShadow: "0 6px 20px rgba(0,0,0,0.06)",
+        }}
+      >
         <Typography variant="h5" fontWeight="bold" gutterBottom>
           Patient History
         </Typography>
@@ -108,6 +116,12 @@ const HistoryPage = () => {
         {/* SEARCH */}
         <Box sx={{ display: "flex", gap: 2, mb: 4 }}>
           <TextField
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 3,
+                bgcolor: "#ffffff",
+              },
+            }}
             fullWidth
             label="National ID"
             value={nationalId}
@@ -124,7 +138,15 @@ const HistoryPage = () => {
             {/* SUMMARY */}
             <Grid container spacing={2} sx={{ mb: 4 }}>
               <Grid size={{ xs: 12, md: 3 }}>
-                <Card>
+                <Card
+                  sx={{
+                    py: 3,
+                    borderRadius: 4,
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
+                    border: "1px solid #eef2f7",
+                    height: "100%",
+                  }}
+                >
                   <CardContent>
                     <Typography color="text.secondary">Patient</Typography>
                     <Typography fontWeight="bold">
@@ -135,7 +157,15 @@ const HistoryPage = () => {
               </Grid>
 
               <Grid size={{ xs: 12, md: 3 }}>
-                <Card>
+                <Card
+                  sx={{
+                    py: 3,
+                    borderRadius: 4,
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
+                    border: "1px solid #eef2f7",
+                    height: "100%",
+                  }}
+                >
                   <CardContent>
                     <Typography color="text.secondary">National ID</Typography>
                     <Typography fontWeight="bold">
@@ -146,7 +176,15 @@ const HistoryPage = () => {
               </Grid>
 
               <Grid size={{ xs: 12, md: 3 }}>
-                <Card>
+                <Card
+                  sx={{
+                    py: 3,
+                    borderRadius: 4,
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
+                    border: "1px solid #eef2f7",
+                    height: "100%",
+                  }}
+                >
                   <CardContent>
                     <Typography color="text.secondary">Visits</Typography>
                     <Typography fontWeight="bold">
@@ -157,7 +195,15 @@ const HistoryPage = () => {
               </Grid>
 
               <Grid size={{ xs: 12, md: 3 }}>
-                <Card>
+                <Card
+                  sx={{
+                    py: 3,
+                    borderRadius: 4,
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
+                    border: "1px solid #eef2f7",
+                    height: "100%",
+                  }}
+                >
                   <CardContent>
                     <Typography color="text.secondary">Last Visit</Typography>
                     <Typography fontWeight="bold">
@@ -171,7 +217,15 @@ const HistoryPage = () => {
             </Grid>
 
             {/* CHART */}
-            <Paper sx={{ p: 3, mb: 4, borderRadius: 3 }}>
+            <Paper
+              sx={{
+                p: 4,
+                mb: 5,
+                borderRadius: 5,
+                border: "1px solid #e2e8f0",
+                boxShadow: "0 4px 14px rgba(0,0,0,0.05)",
+              }}
+            >
               <Typography variant="h6" gutterBottom>
                 Risk Progression
               </Typography>
@@ -187,7 +241,15 @@ const HistoryPage = () => {
                       type="monotone"
                       dataKey="confidence"
                       stroke="#1976d2"
-                      strokeWidth={3}
+                      strokeWidth={4}
+                      dot={{
+                        r: 5,
+                        strokeWidth: 2,
+                        fill: "#fff",
+                      }}
+                      activeDot={{
+                        r: 7,
+                      }}
                     />
                   </LineChart>
                 </ResponsiveContainer>
@@ -230,9 +292,9 @@ const HistoryPage = () => {
                   {index !== history.cases.length - 1 && (
                     <Box
                       sx={{
-                        width: 2,
+                        width: 3,
                         minHeight: 280,
-                        bgcolor: "#ccc",
+                        bgcolor: "#cbd5e1",
                       }}
                     />
                   )}
@@ -244,10 +306,21 @@ const HistoryPage = () => {
                     flex: 1,
                     p: 3,
                     borderRadius: 4,
-                    borderLeft: "6px solid",
-                    borderColor: getBorderColor(visit.decision),
+                    borderLeft: `6px solid ${getBorderColor(visit.decision)}`,
+                    border: "1px solid #e2e8f0",
+                    boxShadow: "0 4px 16px rgba(0,0,0,0.05)",
+                    background: "#ffffff",
                   }}
                 >
+                  <Box
+                    sx={{
+                      height: 6,
+                      borderTopLeftRadius: 16,
+                      borderTopRightRadius: 16,
+                      bgcolor: getBorderColor(visit.decision),
+                      mb: 2,
+                    }}
+                  />
                   {/* HEADER */}
                   <Box
                     sx={{
@@ -258,11 +331,23 @@ const HistoryPage = () => {
                     }}
                   >
                     <Box>
-                      <Typography variant="h6">
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontWeight: 700,
+                          color: "#1e293b",
+                        }}
+                      >
                         Visit #{visit.case_id}
                       </Typography>
 
-                      <Typography color="text.secondary">
+                      <Typography
+                        color="text.secondary"
+                        sx={{
+                          fontSize: "0.9rem",
+                          color: "#64748b",
+                        }}
+                      >
                         {new Date(visit.created_at).toLocaleString()}
                       </Typography>
                     </Box>
@@ -271,6 +356,10 @@ const HistoryPage = () => {
                       <Chip
                         label={visit.decision}
                         color={getDecisionColor(visit.decision)}
+                        sx={{
+                          fontWeight: 700,
+                          letterSpacing: 0.3,
+                        }}
                       />
 
                       <Chip label={visit.argument_type} variant="outlined" />
@@ -286,22 +375,91 @@ const HistoryPage = () => {
 
                   {/* QUICK SNAPSHOT */}
                   <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-                    <Chip label={`HR ${visit.heart_rate}`} />
-                    <Chip label={`SpO₂ ${visit.spo2}%`} />
-                    <Chip label={`Triage ${visit.triage_score}`} />
+                    <Chip
+                      size="medium"
+                      sx={{
+                        fontWeight: 600,
+                      }}
+                      label={`HR ${visit.heart_rate}`}
+                    />
+                    <Chip
+                      size="medium"
+                      sx={{
+                        fontWeight: 600,
+                      }}
+                      label={`SpO₂ ${visit.spo2}%`}
+                    />
+                    <Chip
+                      size="medium"
+                      sx={{
+                        fontWeight: 600,
+                      }}
+                      label={`Triage ${visit.triage_score}`}
+                    />
                   </Box>
 
-                  <Typography sx={{ mt: 2 }}>Confidence</Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      mt: 2,
+                      mb: 1,
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontWeight: 600,
+                        color: "#334155",
+                      }}
+                    >
+                      Confidence
+                    </Typography>
+
+                    <Typography
+                      sx={{
+                        fontWeight: 700,
+                        color: "#1976d2",
+                      }}
+                    >
+                      {Math.round(visit.confidence * 100)}%
+                    </Typography>
+                  </Box>
 
                   <LinearProgress
                     variant="determinate"
                     value={visit.confidence * 100}
-                    sx={{ height: 10, borderRadius: 5 }}
+                    sx={{
+                      height: 10,
+                      borderRadius: 999,
+                      backgroundColor: "#dbeafe",
+
+                      "& .MuiLinearProgress-bar": {
+                        borderRadius: 999,
+                      },
+                    }}
                   />
 
                   {/* FULL DATA */}
-                  <Accordion sx={{ mt: 3 }}>
-                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                  <Accordion
+                    sx={{
+                      mt: 3,
+                      borderRadius: 3,
+                      overflow: "hidden",
+                      border: "1px solid #e2e8f0",
+                      boxShadow: "none",
+
+                      "&:before": {
+                        display: "none",
+                      },
+                    }}
+                  >
+                    <AccordionSummary
+                      sx={{
+                        bgcolor: "#f8fafc",
+                      }}
+                      expandIcon={<ExpandMoreIcon />}
+                    >
                       <Typography fontWeight="bold">
                         Full Submitted Data
                       </Typography>
@@ -498,7 +656,13 @@ const HistoryPage = () => {
                         </Typography>
 
                         {visit.supporting_rules.map((r, i) => (
-                          <Typography key={i}>
+                          <Typography
+                            key={i}
+                            sx={{
+                              fontSize: "0.95rem",
+                              lineHeight: 1.8,
+                            }}
+                          >
                             {i + 1}. {r}
                           </Typography>
                         ))}
@@ -524,7 +688,13 @@ const HistoryPage = () => {
 
                         {visit.opposing_rules.length > 0 ? (
                           visit.opposing_rules.map((r, i) => (
-                            <Typography key={i}>
+                            <Typography
+                              key={i}
+                              sx={{
+                                fontSize: "0.95rem",
+                                lineHeight: 1.8,
+                              }}
+                            >
                               {i + 1}. {r}
                             </Typography>
                           ))

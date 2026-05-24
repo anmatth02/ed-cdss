@@ -35,7 +35,7 @@ def evaluate_decision(data):
     # Urgent triage (moderate push)
     if f.triage_cat == 2:
         h_score += 1
-        h_rules.append("Urgent triage level")
+        # h_rules.append("Urgent triage level")
 
     # Age + acute presentation
     if f.age_cat > 0 and f.triage_cat >= 2:
@@ -45,51 +45,51 @@ def evaluate_decision(data):
     # High CART
     if f.cart_cat > 0 and f.triage_cat >= 2:
         h_score += 2
-        h_rules.append("Elevated CART risk score")
+        h_rules.append("Elevated cardiac risk indicators together with urgent clinical presentation")
 
     # High NEWS
     if f.news_cat > 0 and f.triage_cat >= 2:
         h_score += 2
-        h_rules.append("Elevated NEWS warning score")
+        h_rules.append("Signs of physiological deterioration associated with elevated triage severity")
 
     # Comorbidity burden
-    if f.cci_cat > 0:
+    if f.cci_cat > 0 and f.age_cat > 0:
         h_score += 2
-        h_rules.append("Relevant comorbidity burden")
+        h_rules.append("Age-related vulnerability combined with relevant comorbidities")
 
     # Not walk-in + older
     if f.walk_in_cat == 0 and f.age_cat > 0:
         h_score += 1
-        h_rules.append("Older patient arriving by ambulance / assisted transport")
+        h_rules.append("Arrival by ambulance associated with increased clinical severity")
 
     # Recent admissions
     if f.hosp_90d_cat > 0:
         h_score += 2
-        h_rules.append("Recent hospitalization history")
+        h_rules.append("Recent hospitalization history suggests increased clinical risk")
 
     # Repeated admissions
     if f.hosp_365d_cat == 2:
         h_score += 1
-        h_rules.append("Multiple hospitalizations in past year")
+        h_rules.append("Repeated hospitalizations suggest increased healthcare utilization risk")
 
     elif f.hosp_365d_cat >= 3:
         h_score += 1
-        h_rules.append("Frequent hospitalizations in past year")
+        h_rules.append("Frequent hospitalizations indicate ongoing clinical instability")
         
     # Hypoxia
     if f.spo2_cat == 0:
         h_score += 3
-        h_rules.append("Low oxygen saturation")
+        # h_rules.append("Low oxygen saturation")
 
     # Fever severe
     if f.temperature_cat >= 3:
         h_score += 1
-        h_rules.append("Abnormal temperature")
+        # h_rules.append("Abnormal temperature")
 
     # Severe pain
     if f.pain_cat >= 2:
         h_score += 1
-        h_rules.append("Moderate to severe pain")
+        # h_rules.append("Moderate to severe pain")
 
     # =====================================================
     # DISCHARGE RULES
@@ -98,12 +98,12 @@ def evaluate_decision(data):
     # Low triage
     if f.triage_cat <= 1:
         d_score += 3
-        d_rules.append("Low acuity triage level")
+        d_rules.append("Low-acuity triage assessment suggests lower immediate clinical risk")
 
     # Walk in + stable
     if f.walk_in_cat == 1 and f.triage_cat <= 1:
         d_score += 2
-        d_rules.append("Walk-in presentation with low acuity")
+        d_rules.append("Walk-in presentation associated with low clinical acuity")
 
     # No comorbidities
     if f.cci_cat == 0:
@@ -113,37 +113,37 @@ def evaluate_decision(data):
     # No recent admissions
     if f.hosp_90d_cat == 0:
         d_score += 1
-        d_rules.append("No hospitalization in past 90 days")
+        d_rules.append("No recent hospitalization history suggesting acute instability")
 
     # Limited yearly admissions
     if f.hosp_365d_cat <= 1:
         d_score += 1
-        d_rules.append("Limited hospitalizations in past year")
+        d_rules.append("Limited hospitalization history suggests lower chronic care burden")
 
     # Low NEWS
     if f.news_cat == 0:
         d_score += 2
-        d_rules.append("Low NEWS warning score")
+        d_rules.append("Physiological assessment indicates low immediate deterioration risk")
 
     # Low CART
     if f.cart_cat == 0:
         d_score += 2
-        d_rules.append("Low CART risk score")
+        d_rules.append("Cardiac risk assessment indicates low acute risk")
 
     # Normal oxygen
     if f.spo2_cat >= 1:
         d_score += 1
-        d_rules.append("Acceptable oxygen saturation")
+        # d_rules.append("Acceptable oxygen saturation")
 
     # Normal temperature
     if f.temperature_cat == 2:
         d_score += 1
-        d_rules.append("Normal temperature")
+        # d_rules.append("Normal temperature")
 
     # Mild / no pain
     if f.pain_cat <= 1:
         d_score += 1
-        d_rules.append("No or mild pain")
+        # d_rules.append("No or mild pain")
 
     # =====================================================
     # FINAL DECISION
@@ -162,10 +162,7 @@ def evaluate_decision(data):
     total = h_score + d_score + 0.00001
     confidence = max(h_score, d_score) / total
 
-    if diff <= 1:
-        decision = "DILEMMA"
-
-    elif confidence < 0.58:
+    if 0.4 <= confidence <= 0.6:
         decision = "DILEMMA"
 
     elif h_score > d_score:

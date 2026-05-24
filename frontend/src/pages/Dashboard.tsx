@@ -52,8 +52,7 @@ const Dashboard = () => {
           variant="body2"
           sx={{ mt: 3, fontStyle: "italic", color: "text.secondary" }}
         >
-          Important: HospiGuide is intended to support — not replace — clinical
-          judgment.
+          Important: HospiGuide is intended to support - not replace - clinical judgment.
         </Typography>
 
         <Button

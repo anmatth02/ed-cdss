@@ -118,4 +118,26 @@ export type CaseResult = {
   explanation_text: string;
 
   input: CaseInput;
+
+  derived_features: {
+    age_cat: number;
+    triage_cat: number;
+    walk_in_cat: number;
+    hosp_365d_cat: number;
+    hosp_90d_cat: number;
+    ed_365d_cat: number;
+
+    cci_raw: number;
+    cci_cat: number;
+
+    news_raw: number;
+    news_cat: number;
+
+    cart_raw: number;
+    cart_cat: number;
+
+    spo2_cat: number;
+    temperature_cat: number;
+    pain_cat: number;
+  }
 };

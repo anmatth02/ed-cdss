@@ -1,10 +1,4 @@
-import {
-  Box,
-  Button,
-  Typography,
-  Paper,
-  Divider,
-} from "@mui/material";
+import { Box, Button, Typography, Paper, Divider } from "@mui/material";
 import type { NewCaseForm } from "../../types/Case";
 
 type Props = {
@@ -14,10 +8,21 @@ type Props = {
 };
 
 const StepReview = ({ data, onBack, onSubmit }: Props) => {
+  const pain = data.painScale ?? 0;
 
   const getColor = (value: number, min: number, max: number) => {
     if (value === 0) return "text.secondary";
-    if (value < min || value > max) return "error.main";
+
+    // severely abnormal
+    if (value < min * 0.85 || value > max * 1.2) {
+      return "error.main";
+    }
+
+    // mildly abnormal
+    if (value < min || value > max) {
+      return "warning.main";
+    }
+
     return "success.main";
   };
 
@@ -26,88 +31,265 @@ const StepReview = ({ data, onBack, onSubmit }: Props) => {
     value: number,
     unit: string,
     min: number,
-    max: number
-  ) => (
-    <Typography sx={{ color: getColor(value, min, max) }}>
-      {label}: {value === 0 ? "—" : `${value} ${unit}`}
-    </Typography>
-  );
+    max: number,
+  ) => {
+    const color = getColor(value, min, max);
+
+    return (
+      <Box
+        sx={{
+          p: 2,
+          borderRadius: 3,
+          border: "1px solid #e2e8f0",
+          background: "#f8fafc",
+        }}
+      >
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+          {label}
+        </Typography>
+
+        <Typography
+          sx={{
+            color,
+            fontWeight: 700,
+            fontSize: "1rem",
+          }}
+        >
+          {value === 0 ? "—" : `${value} ${unit}`}
+        </Typography>
+      </Box>
+    );
+  };
 
   return (
-    <Box>
-      <Typography variant="h5" sx={{ mb: 3 }}>
+    <Box
+      sx={{
+        maxWidth: "1200px",
+        mx: "auto",
+        background: "#ffffff",
+        p: 5,
+        borderRadius: 4,
+        boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
+      }}
+    >
+      <Typography
+        variant="h5"
+        sx={{
+          mb: 4,
+          fontWeight: 700,
+          color: "#1e293b",
+        }}
+      >
         Review Case
       </Typography>
 
       {/* Demographics */}
-      <Paper sx={{ p: 3, mb: 3 }}>
-        <Typography variant="subtitle1">Demographics</Typography>
+      <Paper
+        sx={{
+          p: 4,
+          mb: 3,
+          borderRadius: 4,
+          border: "1px solid #e2e8f0",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+        }}
+      >
+        <Typography
+          variant="subtitle1"
+          sx={{
+            fontWeight: 700,
+            color: "#334155",
+            mb: 1,
+          }}
+        >
+          Demographics
+        </Typography>
         <Divider sx={{ mb: 2 }} />
 
-        <Typography>Name: {data.name || "—"}</Typography>
-        <Typography>Age: {data.age || "—"}</Typography>
+        <Typography sx={{ mb: 1 }}>Name: {data.name || "—"}</Typography>
+        <Typography sx={{ mb: 1 }}>Age: {data.age || "—"}</Typography>
       </Paper>
 
       {/* Visit Characteristics */}
-      <Paper sx={{ p: 3, mb: 3 }}>
-        <Typography variant="subtitle1">Visit Characteristics</Typography>
+      <Paper
+        sx={{
+          p: 4,
+          mb: 3,
+          borderRadius: 4,
+          border: "1px solid #e2e8f0",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+        }}
+      >
+        <Typography
+          variant="subtitle1"
+          sx={{
+            fontWeight: 700,
+            color: "#334155",
+            mb: 1,
+          }}
+        >
+          Visit Characteristics
+        </Typography>
         <Divider sx={{ mb: 2 }} />
 
-        <Typography>
+        <Typography sx={{ mb: 1 }}>
           Mode of Arrival: {data.walkedIn || "-"}
         </Typography>
 
-        <Typography>
+        <Typography sx={{ mb: 1 }}>
           ED Visits (Last Year): {data.edVisitsLastYear || "-"}
         </Typography>
 
-        <Typography>
+        <Typography sx={{ mb: 1 }}>
           Hospitalizations (Last Year): {data.hospitalizationsLastYear || "-"}
         </Typography>
 
-         <Typography>
-          Hospitalizations Last 90 Days: {data.hospitalizationsLast90Days || "-"}
+        <Typography sx={{ mb: 1 }}>
+          Hospitalizations Last 90 Days:{" "}
+          {data.hospitalizationsLast90Days || "-"}
         </Typography>
       </Paper>
 
       {/* Clinical Presentation */}
-      <Paper sx={{ p: 3, mb: 3 }}>
-        <Typography variant="subtitle1">Clinical Presentation</Typography>
-        <Divider sx={{ mb: 2 }} />
-
-        {renderVital("Respiratory Rate", data.respiratoryRate ?? 0, "breaths/min", 12, 20)}
-        {renderVital("Heart Rate", data.heartRate ?? 0, "bpm", 60, 100)}
-        {renderVital("Systolic BP", data.systolicBP ?? 0, "mmHg", 90, 120)}
-        {renderVital("Diastolic BP", data.diastolicBP ?? 0, "mmHg", 60, 80)}
-        {renderVital("Oxygen Saturation", data.spo2 ?? 0, "%", 95, 100)}
-        {renderVital("Temperature", data.temperature ?? 0, "°C", 36.1, 37.2)}
-
-        <Typography>Pain Scale: {data.painScale}/10</Typography>
-
+      <Paper
+        sx={{
+          p: 4,
+          mb: 3,
+          borderRadius: 4,
+          border: "1px solid #e2e8f0",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+        }}
+      >
         <Typography
+          variant="subtitle1"
           sx={{
-            fontWeight: "bold",
-            color:
-              (data.triageScore ?? 0) >= 3
-                ? "error.main"
-                : (data.triageScore ?? 0) === 2
-                ? "warning.main"
-                : "success.main",
+            fontWeight: 700,
+            color: "#334155",
+            mb: 1,
           }}
         >
-          Triage Score: {data.triageScore}
+          Clinical Presentation
+        </Typography>
+        <Divider sx={{ mb: 2 }} />
+
+        <Typography sx={{ mb: 1 }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              mb: 2,
+            }}
+          >
+            <Typography>Pain Scale:</Typography>
+            <Box
+              sx={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 1,
+                px: 2,
+                py: 1,
+                borderRadius: 3,
+                background:
+                  pain >= 7 ? "#fff1f2" : pain >= 4 ? "#fff7ed" : "#f0fdf4",
+                mb: 3,
+              }}
+            >
+              {pain}/10
+            </Box>
+          </Box>
         </Typography>
 
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "1fr",
+              md: "1fr 1fr",
+            },
+            gap: 2,
+            mt: 2,
+          }}
+        >
+          {renderVital(
+            "Respiratory Rate",
+            data.respiratoryRate ?? 0,
+            "breaths/min",
+            12,
+            20,
+          )}
+          {renderVital("Heart Rate", data.heartRate ?? 0, "bpm", 60, 100)}
+          {renderVital("Systolic BP", data.systolicBP ?? 0, "mmHg", 90, 120)}
+          {renderVital("Diastolic BP", data.diastolicBP ?? 0, "mmHg", 60, 80)}
+          {renderVital("Oxygen Saturation", data.spo2 ?? 0, "%", 95, 100)}
+          {renderVital("Temperature", data.temperature ?? 0, "°C", 36.1, 37.2)}
+        </Box>
+        <Box
+          sx={{
+            mt: 2,
+            p: 2,
+            border: "1px solid",
+            borderColor:
+              (data.triageScore ?? 0) >= 3
+                ? "#fecaca"
+                : (data.triageScore ?? 0) === 2
+                  ? "#fdba74"
+                  : "#86efac",
+            borderRadius: 2,
+            background:
+              (data.triageScore ?? 0) >= 3
+                ? "#fff1f2"
+                : (data.triageScore ?? 0) === 2
+                  ? "#fff7ed"
+                  : "#f0fdf4",
+          }}
+        >
+          <Typography
+            sx={{
+              fontWeight: 700,
+              color:
+                (data.triageScore ?? 0) >= 3
+                  ? "error.main"
+                  : (data.triageScore ?? 0) === 2
+                    ? "warning.main"
+                    : "success.main",
+            }}
+          >
+            Triage Score: {data.triageScore}
+          </Typography>
+        </Box>
         <Divider sx={{ my: 2 }} />
 
-        <Typography>Fever: {data.fever ? "Yes" : "No"}</Typography>
-        <Typography>Headache: {data.headache ? "Yes" : "No"}</Typography>
-        <Typography>Abdominal Pain: {data.abdominalPain ? "Yes" : "No"}</Typography>
+        <Typography sx={{ mb: 1 }}>
+          Fever: {data.fever ? "Yes" : "No"}
+        </Typography>
+        <Typography sx={{ mb: 1 }}>
+          Headache: {data.headache ? "Yes" : "No"}
+        </Typography>
+        <Typography sx={{ mb: 1 }}>
+          Abdominal Pain: {data.abdominalPain ? "Yes" : "No"}
+        </Typography>
       </Paper>
 
       {/* Comorbidities */}
-      <Paper sx={{ p: 3, mb: 3 }}>
-        <Typography variant="subtitle1">Comorbidity Profile</Typography>
+      <Paper
+        sx={{
+          p: 4,
+          mb: 3,
+          borderRadius: 4,
+          border: "1px solid #e2e8f0",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+        }}
+      >
+        <Typography
+          variant="subtitle1"
+          sx={{
+            fontWeight: 700,
+            color: "#334155",
+            mb: 1,
+          }}
+        >
+          Comorbidity Profile
+        </Typography>
         <Divider sx={{ mb: 2 }} />
 
         {[
@@ -153,18 +335,51 @@ const StepReview = ({ data, onBack, onSubmit }: Props) => {
           mets: data.mets,
           hiv: data.hiv,
         }).some(Boolean) && (
-          <Typography color="text.secondary">
+          <Box
+            sx={{
+              p: 2,
+              borderRadius: 2,
+              background: "#f0fdf4",
+              color: "#166534",
+              fontWeight: 600,
+              display: "inline-block",
+            }}
+          >
             No comorbidities reported
-          </Typography>
+          </Box>
         )}
       </Paper>
 
-      <Box sx={{ mt: 3 }}>
-        <Button onClick={onBack} sx={{ mr: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          mt: 5,
+        }}
+      >
+        <Button
+          variant="outlined"
+          onClick={onBack}
+          sx={{
+            borderRadius: 3,
+            px: 4,
+            textTransform: "none",
+            fontWeight: 600,
+          }}
+        >
           Back
         </Button>
 
-        <Button variant="contained" onClick={onSubmit}>
+        <Button
+          variant="contained"
+          onClick={onSubmit}
+          sx={{
+            borderRadius: 3,
+            px: 5,
+            fontWeight: 700,
+            textTransform: "none",
+          }}
+        >
           Submit Case
         </Button>
       </Box>

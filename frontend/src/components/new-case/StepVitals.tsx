@@ -3,7 +3,6 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
-  InputAdornment,
   Slider,
   TextField,
   Typography,
@@ -52,8 +51,26 @@ const StepVitals = ({ onNext, onBack, onChange }: Props) => {
   };
 
   return (
-    <Box>
-      <div>Symptoms</div>
+    <Box
+      sx={{
+        maxWidth: "1000px",
+        mx: "auto",
+        background: "#ffffff",
+        p: 5,
+        borderRadius: 4,
+        boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
+      }}
+    >
+      <Typography
+        variant="h5"
+        sx={{
+          mb: 4,
+          fontWeight: 700,
+          color: "#1e293b",
+        }}
+      >
+        Clinical Presentation
+      </Typography>
       {/* Symptoms */}
       <FormControlLabel
         control={
@@ -88,7 +105,16 @@ const StepVitals = ({ onNext, onBack, onChange }: Props) => {
       />
 
       {/* Pain */}
-      <Box sx={{ mt: 2 }}>
+      <Box
+        sx={{
+          mt: 3,
+          mb: 4,
+          p: 3,
+          borderRadius: 3,
+          background: "#f8fafc",
+          border: "1px solid #e2e8f0",
+        }}
+      >
         Pain Scale: {local.painScale}/10
         <Slider
           min={0}
@@ -105,140 +131,192 @@ const StepVitals = ({ onNext, onBack, onChange }: Props) => {
       </Box>
 
       {/* Vitals */}
-      <TextField
-        label="Respiratory Rate"
-        type="number"
-        fullWidth
-        margin="normal"
-        value={asDisplayValue(local.respiratoryRate)}
-        placeholder="e.g. 76"
-        helperText="Typical adult: 60–100 bpm"
-        onChange={(e) => {
-          const raw = e.target.value;
-          setLocal({ ...local, respiratoryRate: raw === "" ? 0 : Number(raw) });
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "1fr",
+            md: "1fr 1fr",
+          },
+          gap: 3,
         }}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">breaths/min</InputAdornment>
-          ),
-        }}
-      />
+      >
+        <TextField
+          label="Respiratory Rate"
+          type="number"
+          value={asDisplayValue(local.respiratoryRate)}
+          placeholder="e.g. 12"
+          helperText="Typical adult: 12–20 breaths/min"
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              borderRadius: 3,
+              background: "#fff",
+              height: 56,
+            },
+          }}
+          onChange={(e) => {
+            const raw = e.target.value;
+            setLocal({
+              ...local,
+              respiratoryRate: raw === "" ? 0 : Number(raw),
+            });
+          }}
+        />
 
-      <TextField
-        label="Heart Rate"
-        type="number"
-        fullWidth
-        margin="normal"
-        value={asDisplayValue(local.heartRate)}
-        placeholder="e.g. 72"
-        helperText="Typical adult: 60–100 bpm"
-        onChange={(e) => {
-          const raw = e.target.value;
-          setLocal({ ...local, heartRate: raw === "" ? 0 : Number(raw) });
-        }}
-        InputProps={{
-          endAdornment: <InputAdornment position="end">bpm</InputAdornment>,
-        }}
-      />
+        <TextField
+          label="Heart Rate"
+          type="number"
+          value={asDisplayValue(local.heartRate)}
+          placeholder="e.g. 72"
+          helperText="Typical adult: 60–100 bpm"
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              borderRadius: 3,
+              background: "#fff",
+              height: 56,
+            },
+          }}
+          onChange={(e) => {
+            const raw = e.target.value;
+            setLocal({ ...local, heartRate: raw === "" ? 0 : Number(raw) });
+          }}
+        />
 
-      <TextField
-        label="Systolic BP"
-        type="number"
-        fullWidth
-        margin="normal"
-        value={asDisplayValue(local.systolicBP)}
-        placeholder="e.g. 120"
-        helperText="Typical adult: 90–120 mmHg"
-        onChange={(e) => {
-          const raw = e.target.value;
-          setLocal({ ...local, systolicBP: raw === "" ? 0 : Number(raw) });
-        }}
-        InputProps={{
-          endAdornment: <InputAdornment position="end">mmHg</InputAdornment>,
-        }}
-      />
+        <TextField
+          label="Systolic BP"
+          type="number"
+          value={asDisplayValue(local.systolicBP)}
+          placeholder="e.g. 120"
+          helperText="Typical adult: 90–120 mmHg"
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              borderRadius: 3,
+              background: "#fff",
+              height: 56,
+            },
+          }}
+          onChange={(e) => {
+            const raw = e.target.value;
+            setLocal({ ...local, systolicBP: raw === "" ? 0 : Number(raw) });
+          }}
+        />
 
-      <TextField
-        label="Diastolic BP"
-        type="number"
-        fullWidth
-        margin="normal"
-        value={asDisplayValue(local.diastolicBP)}
-        placeholder="e.g. 80"
-        helperText="Typical adult: 60–80 mmHg"
-        onChange={(e) => {
-          const raw = e.target.value;
-          setLocal({ ...local, diastolicBP: raw === "" ? 0 : Number(raw) });
-        }}
-        InputProps={{
-          endAdornment: <InputAdornment position="end">mmHg</InputAdornment>,
-        }}
-      />
+        <TextField
+          label="Diastolic BP"
+          type="number"
+          value={asDisplayValue(local.diastolicBP)}
+          placeholder="e.g. 80"
+          helperText="Typical adult: 60–80 mmHg"
+          onChange={(e) => {
+            const raw = e.target.value;
+            setLocal({ ...local, diastolicBP: raw === "" ? 0 : Number(raw) });
+          }}
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              borderRadius: 3,
+              background: "#fff",
+              height: 56,
+            },
+          }}
+        />
 
-      <TextField
-        label="Oxygen Saturation"
-        type="number"
-        fullWidth
-        margin="normal"
-        value={asDisplayValue(local.spo2)}
-        placeholder="e.g. 98"
-        helperText="Typical adult: 95–100%"
-        onChange={(e) => {
-          const raw = e.target.value;
-          setLocal({ ...local, spo2: raw === "" ? 0 : Number(raw) });
-        }}
-        InputProps={{
-          endAdornment: <InputAdornment position="end">%</InputAdornment>,
-        }}
-      />
+        <TextField
+          label="Oxygen Saturation"
+          type="number"
+          value={asDisplayValue(local.spo2)}
+          placeholder="e.g. 98"
+          helperText="Typical adult: 95–100%"
+          onChange={(e) => {
+            const raw = e.target.value;
+            setLocal({ ...local, spo2: raw === "" ? 0 : Number(raw) });
+          }}
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              borderRadius: 3,
+              background: "#fff",
+              height: 56,
+            },
+          }}
+        />
 
-      <TextField
-        label="Temperature"
-        type="number"
-        fullWidth
-        margin="normal"
-        value={asDisplayValue(local.temperature)}
-        placeholder="e.g. 36.8"
-        helperText="Typical adult: 36.1–37.2 °C"
-        onChange={(e) => {
-          const raw = e.target.value;
-          setLocal({ ...local, temperature: raw === "" ? 0 : Number(raw) });
-        }}
-        inputProps={{ step: 0.1 }}
-        InputProps={{
-          endAdornment: <InputAdornment position="end">°C</InputAdornment>,
-        }}
-      />
+        <TextField
+          label="Temperature"
+          type="number"
+          value={asDisplayValue(local.temperature)}
+          placeholder="e.g. 36.8"
+          helperText="Typical adult: 36.1–37.2 °C"
+          onChange={(e) => {
+            const raw = e.target.value;
+            setLocal({ ...local, temperature: raw === "" ? 0 : Number(raw) });
+          }}
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              borderRadius: 3,
+              background: "#fff",
+              height: 56,
+            },
+          }}
+        />
 
-      <TextField
-        label="Triage Acuity Level"
-        type="number"
-        fullWidth
-        margin="normal"
-        value={local.triageScore ?? ""}
-        placeholder="0–4"
-        helperText="0 = Non-Urgent, 1 = Less Urgent, 2 = Urgent, 3 = Emergent, 4 = Resuscitation"
-        onChange={(e) => {
-          const raw = e.target.value;
+        <TextField
+          label="Triage Acuity Level"
+          type="number"
+          value={local.triageScore ?? ""}
+          placeholder="0–4"
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              borderRadius: 3,
+              background: "#fff",
+              height: 56,
+            },
+          }}
+          helperText="0 = Non-Urgent, 1 = Less Urgent, 2 = Urgent, 3 = Emergent, 4 = Resuscitation"
+          onChange={(e) => {
+            const raw = e.target.value;
 
-          setLocal({
-            ...local,
-            triageScore: raw === "" ? undefined : Number(raw),
-          });
-        }}
-        inputProps={{
-          min: 0,
-          max: 4,
-        }}
-        InputProps={{
-          endAdornment: <InputAdornment position="end">/4</InputAdornment>,
-        }}
-      />
+            setLocal({
+              ...local,
+              triageScore: raw === "" ? undefined : Number(raw),
+            });
+          }}
+        />
+      </Box>
 
-      <Button onClick={onBack}>Back</Button>
-      <Button variant="contained" onClick={handleNext}>
-        Next
-      </Button>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          mt: 5,
+        }}
+      >
+        <Button
+          variant="outlined"
+          size="large"
+          onClick={onBack}
+          sx={{
+            borderRadius: 3,
+            px: 4,
+            textTransform: "none",
+            fontWeight: 600,
+          }}
+        >
+          Back
+        </Button>
+
+        <Button
+          variant="contained"
+          size="large"
+          onClick={handleNext}
+          sx={{
+            borderRadius: 3,
+            px: 5,
+            fontWeight: 700,
+            textTransform: "none",
+          }}
+        >
+          Next
+        </Button>
+      </Box>
     </Box>
   );
 };
