@@ -104,7 +104,7 @@ const HistoryPage = () => {
         sx={{
           p: 4,
           borderRadius: 5,
-          bgcolor: "#fcf7fd",
+          bgcolor: "#ee4cd81c",
           border: "1px solid #eadcf0",
           boxShadow: "0 6px 20px rgba(0,0,0,0.06)",
         }}

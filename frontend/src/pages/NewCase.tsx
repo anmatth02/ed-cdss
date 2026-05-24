@@ -205,7 +205,7 @@ const NewCase = () => {
       <Typography variant="h4" fontWeight="bold" gutterBottom>
         HospiGuide
       </Typography>
-      <Paper sx={{ p: 4, width: "90%", bgcolor: "#fcf6fd" }}>
+      <Paper sx={{ p: 4, width: "90%", bgcolor: "#ee4cd81c" }}>
         <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
           {steps.map((label) => (
             <Step key={label}>

@@ -24,11 +24,11 @@ const Sidebar = () => {
               mb: 1,
               borderRadius: 2,
               backgroundColor: isActive ? "#ede7f6" : "transparent",
-              borderLeft: isActive ? "4px solid #5e35b1" : "4px solid transparent",
-              color: isActive ? "#4527a0" : "#1f1f1f",
+              borderLeft: isActive ? "4px solid #360e2a" : "4px solid transparent",
+              color: isActive ? "#03030352" : "#635353",
               transition: "all 0.2s ease",
               "&:hover": {
-                backgroundColor: isActive ? "#e6ddf5" : "#f5f5f5",
+                backgroundColor: isActive ? "#7c537a" : "#f5f5f5",
               },
             }}
           >

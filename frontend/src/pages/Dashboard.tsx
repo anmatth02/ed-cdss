@@ -16,7 +16,7 @@ const Dashboard = () => {
           mb: 4,
           p: 4,
           borderRadius: 3,
-          background: "linear-gradient(135deg, #f3e5f5, #e3f2fd)",
+          background: "linear-gradient(135deg, #ee4cd81c, #ffffff)",
           boxShadow: 2,
         }}
       >
