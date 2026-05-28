@@ -72,6 +72,7 @@ const StepVitals = ({ onNext, onBack, onChange }: Props) => {
         Clinical Presentation
       </Typography>
       {/* Symptoms */}
+      <p>Symptoms</p>
       <FormControlLabel
         control={
           <Checkbox
