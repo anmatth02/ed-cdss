@@ -238,7 +238,7 @@ const HistoryPage = () => {
                     <XAxis dataKey="date" />
                     <YAxis domain={[0, 100]} />
                     <Tooltip
-                      formatter={(value: number) => {
+                      formatter={(value) => {
                         if (value === 50) {
                           return ["Dilemma", "Status"];
                         }
