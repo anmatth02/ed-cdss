@@ -90,8 +90,9 @@ const HistoryPage = () => {
       ?.slice()
       .reverse()
       .map((c) => ({
-        date: new Date(c.created_at).toLocaleDateString(),
-        confidence: Math.round(c.confidence * 100),
+        date: new Date(c.created_at).toLocaleString(),
+        confidence:
+          c.decision === "DILEMMA" ? 50 : Math.round(c.confidence * 100),
       })) || [];
 
   return (
@@ -236,7 +237,15 @@ const HistoryPage = () => {
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="date" />
                     <YAxis domain={[0, 100]} />
-                    <Tooltip />
+                    <Tooltip
+                      formatter={(value: number) => {
+                        if (value === 50) {
+                          return ["Dilemma", "Status"];
+                        }
+
+                        return [`${value}%`, "Confidence"];
+                      }}
+                    />
                     <Line
                       type="monotone"
                       dataKey="confidence"
@@ -398,47 +407,51 @@ const HistoryPage = () => {
                     />
                   </Box>
 
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      mt: 2,
-                      mb: 1,
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontWeight: 600,
-                        color: "#334155",
-                      }}
-                    >
-                      Confidence
-                    </Typography>
+                  {visit.decision !== "DILEMMA" && (
+                    <>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          mt: 2,
+                          mb: 1,
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            fontWeight: 600,
+                            color: "#334155",
+                          }}
+                        >
+                          Confidence
+                        </Typography>
 
-                    <Typography
-                      sx={{
-                        fontWeight: 700,
-                        color: "#1976d2",
-                      }}
-                    >
-                      {Math.round(visit.confidence * 100)}%
-                    </Typography>
-                  </Box>
+                        <Typography
+                          sx={{
+                            fontWeight: 700,
+                            color: "#1976d2",
+                          }}
+                        >
+                          {Math.round(visit.confidence * 100)}%
+                        </Typography>
+                      </Box>
 
-                  <LinearProgress
-                    variant="determinate"
-                    value={visit.confidence * 100}
-                    sx={{
-                      height: 10,
-                      borderRadius: 999,
-                      backgroundColor: "#dbeafe",
+                      <LinearProgress
+                        variant="determinate"
+                        value={visit.confidence * 100}
+                        sx={{
+                          height: 10,
+                          borderRadius: 999,
+                          backgroundColor: "#dbeafe",
 
-                      "& .MuiLinearProgress-bar": {
-                        borderRadius: 999,
-                      },
-                    }}
-                  />
+                          "& .MuiLinearProgress-bar": {
+                            borderRadius: 999,
+                          },
+                        }}
+                      />
+                    </>
+                  )}
 
                   {/* FULL DATA */}
                   <Accordion

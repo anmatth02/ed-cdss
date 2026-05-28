@@ -26,13 +26,17 @@ def get_db():
 # --------------------------------------------------
 # CREATE PATIENT
 # --------------------------------------------------
+
 @router.post("/patients")
 def create_patient(data: PatientCreate, db: Session = Depends(get_db)):
     try:
+        national_id = data.national_id.strip()
+
         existing = db.query(Patient).filter(
-            Patient.national_id == data.national_id
+            Patient.national_id == national_id
         ).first()
 
+        # RETURN EXISTING PATIENT
         if existing:
             return {
                 "id": existing.id,
@@ -40,13 +44,34 @@ def create_patient(data: PatientCreate, db: Session = Depends(get_db)):
                 "national_id": existing.national_id,
             }
 
+        # CREATE NEW PATIENT
         patient = Patient(
             name=data.name.strip(),
-            national_id=data.national_id.strip()
+            national_id=national_id
         )
 
         db.add(patient)
-        db.commit()
+
+        try:
+            db.commit()
+
+        # HANDLE DUPLICATE INSERT SAFELY
+        except Exception:
+            db.rollback()
+
+            existing = db.query(Patient).filter(
+                Patient.national_id == national_id
+            ).first()
+
+            if existing:
+                return {
+                    "id": existing.id,
+                    "name": existing.name,
+                    "national_id": existing.national_id,
+                }
+
+            raise
+
         db.refresh(patient)
 
         return {
