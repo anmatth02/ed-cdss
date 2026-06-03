@@ -65,12 +65,29 @@ const HistoryPage = () => {
   const [history, setHistory] = useState<HistoryResponse | null>(null);
 
   const fetchHistory = async () => {
-    const res = await fetch(
-      `${API_URL}/cases/patients/by-national-id/${nationalId}/history`,
-    );
+    try {
+      const res = await fetch(
+        `${API_URL}/cases/patients/by-national-id/${nationalId}/history`,
+      );
 
-    const data = await res.json();
-    setHistory(data);
+      if (!res.ok) {
+        setHistory(null);
+        alert("Patient not found");
+        return;
+      }
+
+      const data = await res.json();
+
+      if (!data.patient) {
+        setHistory(null);
+        return;
+      }
+
+      setHistory(data);
+    } catch (error) {
+      console.error(error);
+      setHistory(null);
+    }
   };
 
   const getDecisionColor = (decision: string) => {
@@ -141,11 +158,9 @@ const HistoryPage = () => {
               <Grid size={{ xs: 12, md: 3 }}>
                 <Card
                   sx={{
-                    py: 3,
                     borderRadius: 4,
                     boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
                     border: "1px solid #eef2f7",
-                    height: "100%",
                   }}
                 >
                   <CardContent>
@@ -160,11 +175,9 @@ const HistoryPage = () => {
               <Grid size={{ xs: 12, md: 3 }}>
                 <Card
                   sx={{
-                    py: 3,
                     borderRadius: 4,
                     boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
                     border: "1px solid #eef2f7",
-                    height: "100%",
                   }}
                 >
                   <CardContent>
@@ -179,11 +192,9 @@ const HistoryPage = () => {
               <Grid size={{ xs: 12, md: 3 }}>
                 <Card
                   sx={{
-                    py: 3,
                     borderRadius: 4,
                     boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
                     border: "1px solid #eef2f7",
-                    height: "100%",
                   }}
                 >
                   <CardContent>
@@ -198,11 +209,9 @@ const HistoryPage = () => {
               <Grid size={{ xs: 12, md: 3 }}>
                 <Card
                   sx={{
-                    py: 3,
                     borderRadius: 4,
                     boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
                     border: "1px solid #eef2f7",
-                    height: "100%",
                   }}
                 >
                   <CardContent>
