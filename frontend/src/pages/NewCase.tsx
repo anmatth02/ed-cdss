@@ -219,7 +219,16 @@ const NewCase = () => {
         )}
 
         {activeStep === 1 && (
-          <StepHistory onNext={next} onBack={back} onChange={update} />
+          <StepHistory
+            onNext={next}
+            onBack={back}
+            onChange={update}
+            defaultEdVisitsLastYear={formData.edVisitsLastYear}
+            defaultHospitalizationsLastYear={formData.hospitalizationsLastYear}
+            defaultHospitalizationsLast90Days={
+              formData.hospitalizationsLast90Days
+            }
+          />
         )}
 
         {activeStep === 2 && (

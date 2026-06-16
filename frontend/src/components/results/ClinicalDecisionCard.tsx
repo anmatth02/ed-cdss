@@ -173,6 +173,338 @@ const ClinicalDecisionCard = ({ result, formData, onStartNewCase }: Props) => {
         Created: {new Date(result.created_at).toLocaleString("en-GB")}
       </Typography>
 
+      <Divider sx={{ my: 3 }} />
+
+      {/* Recommendation */}
+      <Typography variant="h6" sx={{ mt: 4,fontWeight: 700 }}>
+        <strong>Recommendation</strong>
+      </Typography>
+
+      <Box
+        sx={{
+          mt: 2,
+          p: 3,
+          borderRadius: 3,
+          background:
+            result.decision === "HOSPITALIZATION"
+              ? "#fff4f4"
+              : result.decision === "DISCHARGE"
+                ? "#eef7ee"
+                : "#fff8e6",
+          borderLeft: "6px solid",
+          borderColor: getDecisionColor(),
+        }}
+      >
+        <Typography
+          variant="body1"
+          sx={{
+            fontWeight: 600,
+          }}
+        >
+          {getRecommendation()}
+        </Typography>
+      </Box>
+
+      <Divider sx={{ my: 3 }} />
+
+      <Typography
+        variant="h6"
+        sx={{
+          mt: 4,
+          mb: 2,
+          fontWeight: 700,
+          color: "#1e293b",
+        }}
+      >
+        <strong>Decision Explanation</strong>
+      </Typography>
+
+      <Box
+        sx={{
+          bgcolor: supportingStyles.bg,
+          p: 3,
+          borderRadius: 3,
+          border: "1px solid",
+          borderColor:
+            result.decision === "HOSPITALIZATION" ? "#ffcdd2" : "#c8e6c9",
+          boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+          mt: 2,
+          mb: 3,
+        }}
+      >
+        <Typography
+          fontWeight="bold"
+          color={supportingStyles.text}
+          sx={{ mb: 1 }}
+        >
+          {supportingTitle}
+        </Typography>
+
+        {result.supporting_rules.map((rule, i) => (
+          <Typography key={i}>
+            {i + 1}. {rule}
+          </Typography>
+        ))}
+      </Box>
+
+      <Box
+        sx={{
+          bgcolor: opposingStyles.bg,
+          p: 3,
+          borderRadius: 3,
+          border: "1px solid",
+          borderColor:
+            result.decision === "HOSPITALIZATION" ? "#c8e6c9" : "#ffcdd2",
+          boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+        }}
+      >
+        <Typography
+          fontWeight="bold"
+          color={opposingStyles.text}
+          sx={{ mb: 1 }}
+        >
+          {opposingTitle}
+        </Typography>
+
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+          These factors may support a different clinical decision, but they were
+          considered weaker than the factors supporting the recommended
+          disposition.
+        </Typography>
+
+        {result.opposing_rules.length > 0 ? (
+          result.opposing_rules.map((rule, i) => (
+            <Typography key={i}>
+              {i + 1}. {rule}
+            </Typography>
+          ))
+        ) : (
+          <Typography>No significant opposing arguments.</Typography>
+        )}
+      </Box>
+      <br />
+      {/* Confidence */}
+      {result.decision !== "DILEMMA" && (
+        <Box
+          sx={{
+            p: 3,
+            mb: 4,
+            borderRadius: 3,
+            background: "#f8fafc",
+            border: "1px solid #e2e8f0",
+          }}
+        >
+          <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+            Clinical Confidence
+          </Typography>
+
+          <Typography sx={{ mb: 2 }}>
+            The system estimates <b>{confidence}% confidence</b> that{" "}
+            <b>
+              <u>{result.decision}</u>
+            </b>{" "}
+            is the most appropriate disposition based on the submitted clinical
+            information.
+          </Typography>
+
+          <LinearProgress
+            variant="determinate"
+            value={confidence}
+            color={getColor(result.decision)}
+            sx={{
+              height: 12,
+              borderRadius: 10,
+              mb: 2,
+              backgroundColor: "#e5e7eb",
+            }}
+          />
+
+          <Typography variant="body2" color="text.secondary">
+            Confidence reflects how consistently the patient data aligns with
+            patterns associated with the recommended clinical disposition.
+          </Typography>
+        </Box>
+      )}
+
+      {result.decision === "DILEMMA" && (
+        <Typography
+          variant="h6"
+          sx={{
+            mt: 4,
+            mb: 2,
+            fontWeight: 700,
+            color: "#1e293b",
+          }}
+        >
+          <strong>Confidence:</strong>{" "}
+          <u>
+            The clinical indicators suggest mixed risk signals. Some findings
+            support discharge, while others indicate possible need for
+            hospitalization.
+          </u>
+        </Typography>
+      )}
+
+      <Divider sx={{ my: 3 }} />
+
+      <Typography variant="h6" fontWeight={700}>
+        <strong>Risk Scores</strong>
+      </Typography>
+
+      <Box
+        sx={{
+          p: 3,
+          borderRadius: 3,
+          background: "#f8fafc",
+          border: "1px solid #e2e8f0",
+          mt: 2,
+        }}
+      >
+        {derived ? (
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: {
+                xs: "1fr",
+                sm: "repeat(2, 1fr)",
+                md: "repeat(3, 1fr)",
+              },
+              gap: 2,
+              mt: 2,
+            }}
+          >
+            {/* NEWS */}
+            <Box
+              sx={{
+                p: 2,
+                borderRadius: 3,
+                background: "#ffffff",
+                border: "1px solid #e5e7eb",
+              }}
+            >
+              <Typography variant="body2" color="text.secondary">
+                NEWS Score
+              </Typography>
+
+              <Typography variant="h4" fontWeight={700}>
+                {derived.news_raw}
+              </Typography>
+
+              <Chip
+                label={
+                  derived.news_cat === 0
+                    ? "Low"
+                    : derived.news_cat === 1
+                      ? "Medium"
+                      : "High"
+                }
+                color={
+                  derived.news_cat === 0
+                    ? "success"
+                    : derived.news_cat === 1
+                      ? "warning"
+                      : "error"
+                }
+                size="small"
+                sx={{ mt: 1 }}
+              />
+
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                Detects physiological deterioration risk.
+              </Typography>
+            </Box>
+
+            {/* CART */}
+            <Box
+              sx={{
+                p: 2,
+                borderRadius: 3,
+                background: "#ffffff",
+                border: "1px solid #e5e7eb",
+              }}
+            >
+              <Typography variant="body2" color="text.secondary">
+                CART Score
+              </Typography>
+
+              <Typography variant="h4" fontWeight={700}>
+                {derived.cart_raw}
+              </Typography>
+
+              <Chip
+                label={
+                  derived.cart_cat === 0
+                    ? "Low"
+                    : derived.cart_cat === 1
+                      ? "Moderate"
+                      : "High"
+                }
+                color={
+                  derived.cart_cat === 0
+                    ? "success"
+                    : derived.cart_cat === 1
+                      ? "warning"
+                      : "error"
+                }
+                size="small"
+                sx={{ mt: 1 }}
+              />
+
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                Estimates cardiac arrest risk.
+              </Typography>
+            </Box>
+
+            {/* CCI */}
+            <Box
+              sx={{
+                p: 2,
+                borderRadius: 3,
+                background: "#ffffff",
+                border: "1px solid #e5e7eb",
+              }}
+            >
+              <Typography variant="body2" color="text.secondary">
+                CCI Score
+              </Typography>
+
+              <Typography variant="h4" fontWeight={700}>
+                {derived.cci_raw}
+              </Typography>
+
+              <Chip
+                label={
+                  derived.cci_cat === 0
+                    ? "None"
+                    : derived.cci_cat === 1
+                      ? "Mild"
+                      : derived.cci_cat === 2
+                        ? "Moderate"
+                        : "Severe"
+                }
+                color={
+                  derived.cci_cat <= 1
+                    ? "success"
+                    : derived.cci_cat === 2
+                      ? "warning"
+                      : "error"
+                }
+                size="small"
+                sx={{ mt: 1 }}
+              />
+
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                Measures comorbidity burden and mortality risk.
+              </Typography>
+            </Box>
+          </Box>
+        ) : (
+          <Typography color="error">No risk scores available</Typography>
+        )}
+      </Box>
+
+      <Divider sx={{ my: 3 }} />
+
       {/* Snapshot */}
       <Typography
         variant="h6"
@@ -183,7 +515,7 @@ const ClinicalDecisionCard = ({ result, formData, onStartNewCase }: Props) => {
           color: "#1e293b",
         }}
       >
-        Patient Snapshot
+        <strong>Patient Snapshot</strong>
       </Typography>
 
       <Box
@@ -523,332 +855,6 @@ const ClinicalDecisionCard = ({ result, formData, onStartNewCase }: Props) => {
       </Accordion>
 
       <Divider sx={{ my: 3 }} />
-
-      <Typography
-        variant="h6"
-        sx={{
-          mt: 4,
-          mb: 2,
-          fontWeight: 700,
-          color: "#1e293b",
-        }}
-      >
-        <strong>Decision Explanation</strong>
-      </Typography>
-
-      <Box
-        sx={{
-          bgcolor: supportingStyles.bg,
-          p: 3,
-          borderRadius: 3,
-          border: "1px solid",
-          borderColor:
-            result.decision === "HOSPITALIZATION" ? "#ffcdd2" : "#c8e6c9",
-          boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-          mt: 2,
-          mb: 3,
-        }}
-      >
-        <Typography
-          fontWeight="bold"
-          color={supportingStyles.text}
-          sx={{ mb: 1 }}
-        >
-          {supportingTitle}
-        </Typography>
-
-        {result.supporting_rules.map((rule, i) => (
-          <Typography key={i}>
-            {i + 1}. {rule}
-          </Typography>
-        ))}
-      </Box>
-
-      <Box
-        sx={{
-          bgcolor: opposingStyles.bg,
-          p: 3,
-          borderRadius: 3,
-          border: "1px solid",
-          borderColor:
-            result.decision === "HOSPITALIZATION" ? "#c8e6c9" : "#ffcdd2",
-          boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-        }}
-      >
-        <Typography
-          fontWeight="bold"
-          color={opposingStyles.text}
-          sx={{ mb: 1 }}
-        >
-          {opposingTitle}
-        </Typography>
-
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-          These factors may support a different clinical decision, but they were
-          considered weaker than the factors supporting the recommended
-          disposition.
-        </Typography>
-
-        {result.opposing_rules.length > 0 ? (
-          result.opposing_rules.map((rule, i) => (
-            <Typography key={i}>
-              {i + 1}. {rule}
-            </Typography>
-          ))
-        ) : (
-          <Typography>No significant opposing arguments.</Typography>
-        )}
-      </Box>
-      <br />
-      {/* Confidence */}
-      {result.decision !== "DILEMMA" && (
-        <Box
-          sx={{
-            p: 3,
-            mb: 4,
-            borderRadius: 3,
-            background: "#f8fafc",
-            border: "1px solid #e2e8f0",
-          }}
-        >
-          <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
-            Clinical Confidence
-          </Typography>
-
-          <Typography sx={{ mb: 2 }}>
-            The system estimates <b>{confidence}% confidence</b> that{" "}
-            <b>
-              <u>{result.decision}</u>
-            </b>{" "}
-            is the most appropriate disposition based on the submitted clinical
-            information.
-          </Typography>
-
-          <LinearProgress
-            variant="determinate"
-            value={confidence}
-            color={getColor(result.decision)}
-            sx={{
-              height: 12,
-              borderRadius: 10,
-              mb: 2,
-              backgroundColor: "#e5e7eb",
-            }}
-          />
-
-          <Typography variant="body2" color="text.secondary">
-            Confidence reflects how consistently the patient data aligns with
-            patterns associated with the recommended clinical disposition.
-          </Typography>
-        </Box>
-      )}
-
-      {result.decision === "DILEMMA" && (
-        <Typography
-          variant="h6"
-          sx={{
-            mt: 4,
-            mb: 2,
-            fontWeight: 700,
-            color: "#1e293b",
-          }}
-        >
-          <strong>Confidence:</strong>{" "}
-          <u>
-            The clinical indicators suggest mixed risk signals. Some findings
-            support discharge, while others indicate possible need for
-            hospitalization.
-          </u>
-        </Typography>
-      )}
-
-      <Typography variant="h6">
-        <strong>Risk Scores</strong>
-      </Typography>
-
-      <Box
-        sx={{
-          p: 3,
-          borderRadius: 3,
-          background: "#f8fafc",
-          border: "1px solid #e2e8f0",
-          mt: 2,
-        }}
-      >
-        {derived ? (
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: {
-                xs: "1fr",
-                sm: "repeat(2, 1fr)",
-                md: "repeat(3, 1fr)",
-              },
-              gap: 2,
-              mt: 2,
-            }}
-          >
-            {/* NEWS */}
-            <Box
-              sx={{
-                p: 2,
-                borderRadius: 3,
-                background: "#ffffff",
-                border: "1px solid #e5e7eb",
-              }}
-            >
-              <Typography variant="body2" color="text.secondary">
-                NEWS Score
-              </Typography>
-
-              <Typography variant="h4" fontWeight={700}>
-                {derived.news_raw}
-              </Typography>
-
-              <Chip
-                label={
-                  derived.news_cat === 0
-                    ? "Low"
-                    : derived.news_cat === 1
-                      ? "Medium"
-                      : "High"
-                }
-                color={
-                  derived.news_cat === 0
-                    ? "success"
-                    : derived.news_cat === 1
-                      ? "warning"
-                      : "error"
-                }
-                size="small"
-                sx={{ mt: 1 }}
-              />
-
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                Detects physiological deterioration risk.
-              </Typography>
-            </Box>
-
-            {/* CART */}
-            <Box
-              sx={{
-                p: 2,
-                borderRadius: 3,
-                background: "#ffffff",
-                border: "1px solid #e5e7eb",
-              }}
-            >
-              <Typography variant="body2" color="text.secondary">
-                CART Score
-              </Typography>
-
-              <Typography variant="h4" fontWeight={700}>
-                {derived.cart_raw}
-              </Typography>
-
-              <Chip
-                label={
-                  derived.cart_cat === 0
-                    ? "Low"
-                    : derived.cart_cat === 1
-                      ? "Moderate"
-                      : "High"
-                }
-                color={
-                  derived.cart_cat === 0
-                    ? "success"
-                    : derived.cart_cat === 1
-                      ? "warning"
-                      : "error"
-                }
-                size="small"
-                sx={{ mt: 1 }}
-              />
-
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                Estimates cardiac arrest risk.
-              </Typography>
-            </Box>
-
-            {/* CCI */}
-            <Box
-              sx={{
-                p: 2,
-                borderRadius: 3,
-                background: "#ffffff",
-                border: "1px solid #e5e7eb",
-              }}
-            >
-              <Typography variant="body2" color="text.secondary">
-                CCI Score
-              </Typography>
-
-              <Typography variant="h4" fontWeight={700}>
-                {derived.cci_raw}
-              </Typography>
-
-              <Chip
-                label={
-                  derived.cci_cat === 0
-                    ? "None"
-                    : derived.cci_cat === 1
-                      ? "Mild"
-                      : derived.cci_cat === 2
-                        ? "Moderate"
-                        : "Severe"
-                }
-                color={
-                  derived.cci_cat <= 1
-                    ? "success"
-                    : derived.cci_cat === 2
-                      ? "warning"
-                      : "error"
-                }
-                size="small"
-                sx={{ mt: 1 }}
-              />
-
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                Measures comorbidity burden and mortality risk.
-              </Typography>
-            </Box>
-          </Box>
-        ) : (
-          <Typography color="error">No risk scores available</Typography>
-        )}
-      </Box>
-
-      <Divider sx={{ mb: 2 }} />
-      {/* Recommendation */}
-      <Typography variant="h6" sx={{ mt: 4 }}>
-        <strong>Recommendation</strong>
-      </Typography>
-
-      <Box
-        sx={{
-          mt: 2,
-          p: 3,
-          borderRadius: 3,
-          background:
-            result.decision === "HOSPITALIZATION"
-              ? "#fff4f4"
-              : result.decision === "DISCHARGE"
-                ? "#eef7ee"
-                : "#fff8e6",
-          borderLeft: "6px solid",
-          borderColor: getDecisionColor(),
-        }}
-      >
-        <Typography
-          variant="body1"
-          sx={{
-            fontWeight: 600,
-          }}
-        >
-          {getRecommendation()}
-        </Typography>
-      </Box>
-
       {/* Next Steps */}
       <Typography
         variant="h6"

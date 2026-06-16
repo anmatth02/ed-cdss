@@ -85,7 +85,52 @@ def create_patient(data: PatientCreate, db: Session = Depends(get_db)):
         print("CREATE PATIENT ERROR:", str(e))
         raise HTTPException(status_code=500, detail=str(e))
 
+# --------------------------------------------------
+# GET PATIENT BY NATIONAL ID
+# --------------------------------------------------
+@router.get("/patients/by-national-id/{national_id}")
+def get_patient_by_national_id(
+    national_id: str,
+    db: Session = Depends(get_db)
+):
+    print("SEARCHING:", national_id)
 
+    patient = db.query(Patient).filter(
+        Patient.national_id == national_id
+    ).first()
+
+    print("PATIENT:", patient)
+
+    if not patient:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Patient {national_id} not found"
+        )
+
+    latest_case = (
+        db.query(Case)
+        .filter(Case.patient_id == patient.id)
+        .order_by(Case.created_at.desc())
+        .first()
+    )
+
+    return {
+        "id": patient.id,
+        "name": patient.name,
+        "national_id": patient.national_id,
+
+        "age": latest_case.age if latest_case else 0,
+
+        "ed_visits_last_year":
+            latest_case.ed_visits_last_year if latest_case else 0,
+
+        "hospitalizations_last_year":
+            latest_case.hospitalizations_last_year if latest_case else 0,
+
+        "hospitalizations_last_90_days":
+            latest_case.hospitalizations_last_90_days if latest_case else 0,
+    }
+    
 # --------------------------------------------------
 # CREATE CASE
 # --------------------------------------------------
