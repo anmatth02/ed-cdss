@@ -259,28 +259,6 @@ const StepVitals = ({ onNext, onBack, onChange }: Props) => {
           }}
         />
 
-        <TextField
-          label="Triage Acuity Level"
-          type="number"
-          value={local.triageScore ?? ""}
-          placeholder="0–4"
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              borderRadius: 3,
-              background: "#fff",
-              height: 56,
-            },
-          }}
-          helperText="0 = Non-Urgent, 1 = Less Urgent, 2 = Urgent, 3 = Emergent, 4 = Resuscitation"
-          onChange={(e) => {
-            const raw = e.target.value;
-
-            setLocal({
-              ...local,
-              triageScore: raw === "" ? undefined : Number(raw),
-            });
-          }}
-        />
       </Box>
 
       <Box

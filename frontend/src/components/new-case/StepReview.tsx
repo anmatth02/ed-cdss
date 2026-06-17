@@ -173,30 +173,38 @@ const StepReview = ({ data, onBack, onSubmit }: Props) => {
 
         <Typography sx={{ mb: 1 }}>
           <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-              mb: 2,
-            }}
-          >
-            <Typography>Pain Scale:</Typography>
-            <Box
-              sx={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 1,
-                px: 2,
-                py: 1,
-                borderRadius: 3,
-                background:
-                  pain >= 7 ? "#fff1f2" : pain >= 4 ? "#fff7ed" : "#f0fdf4",
-                mb: 3,
-              }}
-            >
-              {pain}/10
-            </Box>
-          </Box>
+  sx={{
+    p: 2,
+    borderRadius: 3,
+    border: "1px solid #e2e8f0",
+    background: "#f8fafc",
+  }}
+>
+  <Typography
+    variant="body2"
+    sx={{
+      color: "#64748b",
+      mb: 1,
+    }}
+  >
+    Pain Scale
+  </Typography>
+
+  <Typography
+    sx={{
+      fontSize: 24,
+      fontWeight: 700,
+      color:
+        pain >= 7
+          ? "#dc2626"
+          : pain >= 4
+            ? "#ea580c"
+            : "#16a34a",
+    }}
+  >
+    {pain}/10
+  </Typography>
+</Box>
         </Typography>
 
         <Box
@@ -222,40 +230,6 @@ const StepReview = ({ data, onBack, onSubmit }: Props) => {
           {renderVital("Diastolic BP", data.diastolicBP ?? 0, "mmHg", 60, 80)}
           {renderVital("Oxygen Saturation", data.spo2 ?? 0, "%", 95, 100)}
           {renderVital("Temperature", data.temperature ?? 0, "°C", 36.1, 37.2)}
-        </Box>
-        <Box
-          sx={{
-            mt: 2,
-            p: 2,
-            border: "1px solid",
-            borderColor:
-              (data.triageScore ?? 0) >= 3
-                ? "#fecaca"
-                : (data.triageScore ?? 0) === 2
-                  ? "#fdba74"
-                  : "#86efac",
-            borderRadius: 2,
-            background:
-              (data.triageScore ?? 0) >= 3
-                ? "#fff1f2"
-                : (data.triageScore ?? 0) === 2
-                  ? "#fff7ed"
-                  : "#f0fdf4",
-          }}
-        >
-          <Typography
-            sx={{
-              fontWeight: 700,
-              color:
-                (data.triageScore ?? 0) >= 3
-                  ? "error.main"
-                  : (data.triageScore ?? 0) === 2
-                    ? "warning.main"
-                    : "success.main",
-            }}
-          >
-            Triage Score: {data.triageScore}
-          </Typography>
         </Box>
         <Divider sx={{ my: 2 }} />
 

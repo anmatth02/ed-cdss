@@ -132,6 +132,29 @@ def get_patient_by_national_id(
     }
     
 # --------------------------------------------------
+# EVALUATE CASE ONLY - NO DATABASE SAVE
+# --------------------------------------------------
+@router.post("/evaluate")
+def evaluate_case_only(data: CaseCreate):
+    try:
+        result = evaluate_decision(data)
+
+        return {
+            "decision": result["decision"],
+            "argument_type": result["argument_type"],
+            "confidence": result["confidence"],
+            "supporting_rules": result["supporting_rules"],
+            "opposing_rules": result["opposing_rules"],
+            "hospitalization_score": result["hospitalization_score"],
+            "discharge_score": result["discharge_score"],
+            "derived_features": result["derived_features"],
+        }
+
+    except Exception as e:
+        print("EVALUATE CASE ERROR:", str(e))
+        raise HTTPException(status_code=500, detail=str(e))
+    
+# --------------------------------------------------
 # CREATE CASE
 # --------------------------------------------------
 @router.post("/")
