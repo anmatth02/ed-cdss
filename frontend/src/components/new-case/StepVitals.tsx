@@ -222,11 +222,11 @@ const StepVitals = ({ onNext, onBack, onChange }: Props) => {
         />
 
         <TextField
-          label="Oxygen Saturation"
+          label="Oxygen Saturation (Room Air)"
           type="number"
           value={asDisplayValue(local.spo2)}
           placeholder="e.g. 98"
-          helperText="Typical adult: 95–100%"
+          helperText="SpO₂ on room air (21% O₂). Typical adult: 95–100%"
           onChange={(e) => {
             const raw = e.target.value;
             setLocal({ ...local, spo2: raw === "" ? 0 : Number(raw) });
@@ -258,7 +258,6 @@ const StepVitals = ({ onNext, onBack, onChange }: Props) => {
             },
           }}
         />
-
       </Box>
 
       <Box
