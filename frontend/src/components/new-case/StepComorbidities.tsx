@@ -5,6 +5,10 @@ import {
   FormControlLabel,
   Typography,
   Paper,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  Radio,
 } from "@mui/material";
 
 import { useState } from "react";
@@ -123,7 +127,7 @@ const StepComorbidities = ({ onNext, onBack, onChange }: Props) => {
               control={
                 <Checkbox checked={local.chf} onChange={() => toggle("chf")} />
               }
-              label="Heart Failure"
+              label="Congestive Heart Failure"
             />
             <FormControlLabel
               sx={{
@@ -134,7 +138,7 @@ const StepComorbidities = ({ onNext, onBack, onChange }: Props) => {
               control={
                 <Checkbox checked={local.pvd} onChange={() => toggle("pvd")} />
               }
-              label="Peripheral Vascular"
+              label="Peripheral Vascular Disease"
             />
             <FormControlLabel
               sx={{
@@ -175,7 +179,7 @@ const StepComorbidities = ({ onNext, onBack, onChange }: Props) => {
               control={
                 <Checkbox checked={local.cpd} onChange={() => toggle("cpd")} />
               }
-              label="Chronic Pulmonary"
+              label="Chronic Pulmonary Disease"
             />
             <FormControlLabel
               control={
@@ -190,8 +194,60 @@ const StepComorbidities = ({ onNext, onBack, onChange }: Props) => {
                   onChange={() => toggle("paralysis")}
                 />
               }
-              label="Paralysis"
+              label="Hemiplegia / Paraplegia"
             />
+
+            <FormControlLabel
+              control={
+                <Checkbox checked={local.pud} onChange={() => toggle("pud")} />
+              }
+              label="Peptic Ulcer Disease"
+            />
+
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={local.rheu}
+                  onChange={() => toggle("rheu")}
+                />
+              }
+              label="Rheumatic / Connective Tissue Disease"
+            />
+
+            <FormControl sx={{ mt: 2 }}>
+              <FormLabel>Liver Disease</FormLabel>
+
+              <RadioGroup
+                value={local.liv2 ? "severe" : local.liv1 ? "mild" : "none"}
+                onChange={(e) => {
+                  const value = e.target.value;
+
+                  setLocal((prev) => ({
+                    ...prev,
+                    liv1: value === "mild",
+                    liv2: value === "severe",
+                  }));
+                }}
+              >
+                <FormControlLabel
+                  value="none"
+                  control={<Radio />}
+                  label="None"
+                />
+
+                <FormControlLabel
+                  value="mild"
+                  control={<Radio />}
+                  label="Mild Liver Disease"
+                />
+
+                <FormControlLabel
+                  value="severe"
+                  control={<Radio />}
+                  label="Severe Liver Disease"
+                />
+              </RadioGroup>
+            </FormControl>
           </Paper>
         </Box>
 
@@ -216,18 +272,42 @@ const StepComorbidities = ({ onNext, onBack, onChange }: Props) => {
               Metabolic / Oncology
             </Typography>
 
-            <FormControlLabel
-              control={
-                <Checkbox checked={local.dm1} onChange={() => toggle("dm1")} />
-              }
-              label="Diabetes (no damage)"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox checked={local.dm2} onChange={() => toggle("dm2")} />
-              }
-              label="Diabetes (organ damage)"
-            />
+            <FormControl sx={{ mb: 2 }}>
+              <FormLabel>Diabetes</FormLabel>
+
+              <RadioGroup
+                value={
+                  local.dm2 ? "complication" : local.dm1 ? "simple" : "none"
+                }
+                onChange={(e) => {
+                  const value = e.target.value;
+
+                  setLocal((prev) => ({
+                    ...prev,
+                    dm1: value === "simple",
+                    dm2: value === "complication",
+                  }));
+                }}
+              >
+                <FormControlLabel
+                  value="none"
+                  control={<Radio />}
+                  label="None"
+                />
+
+                <FormControlLabel
+                  value="simple"
+                  control={<Radio />}
+                  label="Without organ damage"
+                />
+
+                <FormControlLabel
+                  value="complication"
+                  control={<Radio />}
+                  label="With organ damage"
+                />
+              </RadioGroup>
+            </FormControl>
             <FormControlLabel
               control={
                 <Checkbox
@@ -237,24 +317,42 @@ const StepComorbidities = ({ onNext, onBack, onChange }: Props) => {
               }
               label="Renal Disease"
             />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={local.malignancy}
-                  onChange={() => toggle("malignancy")}
+            <FormControl sx={{ mt: 2 }}>
+              <FormLabel>Malignancy</FormLabel>
+
+              <RadioGroup
+                value={
+                  local.mets ? "mets" : local.malignancy ? "malignancy" : "none"
+                }
+                onChange={(e) => {
+                  const value = e.target.value;
+
+                  setLocal((prev) => ({
+                    ...prev,
+                    malignancy: value === "malignancy",
+                    mets: value === "mets",
+                  }));
+                }}
+              >
+                <FormControlLabel
+                  value="none"
+                  control={<Radio />}
+                  label="None"
                 />
-              }
-              label="Malignancy"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={local.mets}
-                  onChange={() => toggle("mets")}
+
+                <FormControlLabel
+                  value="malignancy"
+                  control={<Radio />}
+                  label="Any malignancy (including leukemia / lymphoma)"
                 />
-              }
-              label="Metastatic Tumor"
-            />
+
+                <FormControlLabel
+                  value="mets"
+                  control={<Radio />}
+                  label="Metastatic solid tumor"
+                />
+              </RadioGroup>
+            </FormControl>
             <FormControlLabel
               control={
                 <Checkbox checked={local.hiv} onChange={() => toggle("hiv")} />

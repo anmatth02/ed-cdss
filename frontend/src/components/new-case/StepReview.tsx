@@ -173,38 +173,34 @@ const StepReview = ({ data, onBack, onSubmit }: Props) => {
 
         <Typography sx={{ mb: 1 }}>
           <Box
-  sx={{
-    p: 2,
-    borderRadius: 3,
-    border: "1px solid #e2e8f0",
-    background: "#f8fafc",
-  }}
->
-  <Typography
-    variant="body2"
-    sx={{
-      color: "#64748b",
-      mb: 1,
-    }}
-  >
-    Pain Scale
-  </Typography>
+            sx={{
+              p: 2,
+              borderRadius: 3,
+              border: "1px solid #e2e8f0",
+              background: "#f8fafc",
+            }}
+          >
+            <Typography
+              variant="body2"
+              sx={{
+                color: "#64748b",
+                mb: 1,
+              }}
+            >
+              Pain Scale
+            </Typography>
 
-  <Typography
-    sx={{
-      fontSize: 24,
-      fontWeight: 700,
-      color:
-        pain >= 7
-          ? "#dc2626"
-          : pain >= 4
-            ? "#ea580c"
-            : "#16a34a",
-    }}
-  >
-    {pain}/10
-  </Typography>
-</Box>
+            <Typography
+              sx={{
+                fontSize: 24,
+                fontWeight: 700,
+                color:
+                  pain >= 7 ? "#dc2626" : pain >= 4 ? "#ea580c" : "#16a34a",
+              }}
+            >
+              {pain}/10
+            </Typography>
+          </Box>
         </Typography>
 
         <Box
@@ -268,21 +264,21 @@ const StepReview = ({ data, onBack, onSubmit }: Props) => {
 
         {[
           data.mi && "Myocardial Infarction",
-          data.chf && "Heart Failure",
+          data.chf && "Congestive Heart Failure",
           data.pvd && "Peripheral Vascular Disease",
           data.cvd && "Cerebrovascular Disease",
           data.dem && "Dementia",
           data.cpd && "Chronic Pulmonary Disease",
           data.pud && "Peptic Ulcer Disease",
-          data.rheu && "Rheumatic Disease",
+          data.rheu && "Rheumatic / Connective Tissue Disease",
           data.liv1 && "Mild Liver Disease",
           data.liv2 && "Severe Liver Disease",
-          data.dm1 && "Diabetes (no damage)",
-          data.dm2 && "Diabetes (organ damage)",
-          data.paralysis && "Paralysis",
+          data.dm1 && "Diabetes (without organ damage)",
+          data.dm2 && "Diabetes (with organ damage)",
+          data.paralysis && "Hemiplegia / Paraplegia",
           data.renal && "Renal Disease",
-          data.malignancy && "Malignancy",
-          data.mets && "Metastatic Tumor",
+          data.malignancy && "Any Malignancy (including leukemia / lymphoma)",
+          data.mets && "Metastatic Solid Tumor",
           data.hiv && "HIV/AIDS",
         ]
           .filter(Boolean)

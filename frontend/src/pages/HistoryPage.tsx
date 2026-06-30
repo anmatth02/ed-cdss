@@ -513,7 +513,8 @@ const HistoryPage = () => {
                           </Typography>
 
                           <Typography>
-                            Walked In: {visit.input.walked_in ? "Yes" : "No"}
+                            Mode of Arrival:{" "}
+                            {String(visit.input.walked_in ?? "-")}
                           </Typography>
 
                           <Typography>
@@ -611,10 +612,11 @@ const HistoryPage = () => {
                             {visit.input.mi ? "Yes" : "No"}
                           </Typography>
                           <Typography>
-                            Heart Failure: {visit.input.chf ? "Yes" : "No"}
+                            Congestive Heart Failure:{" "}
+                            {visit.input.chf ? "Yes" : "No"}
                           </Typography>
                           <Typography>
-                            Peripheral Vascular:{" "}
+                            Peripheral Vascular Disease:{" "}
                             {visit.input.pvd ? "Yes" : "No"}
                           </Typography>
                           <Typography>
@@ -622,20 +624,42 @@ const HistoryPage = () => {
                           </Typography>
 
                           <Typography>
-                            Chronic Pulmonary: {visit.input.cpd ? "Yes" : "No"}
+                            Chronic Pulmonary Disease:{" "}
+                            {visit.input.cpd ? "Yes" : "No"}
                           </Typography>
                           <Typography>
                             Dementia: {visit.input.dem ? "Yes" : "No"}
                           </Typography>
                           <Typography>
-                            Paralysis: {visit.input.paralysis ? "Yes" : "No"}
+                            Peptic Ulcer Disease:{" "}
+                            {visit.input.pud ? "Yes" : "No"}
                           </Typography>
 
                           <Typography>
-                            Diabetes: {visit.input.dm1 ? "Yes" : "No"}
+                            Rheumatic / Connective Tissue Disease:{" "}
+                            {visit.input.rheu ? "Yes" : "No"}
+                          </Typography>
+
+                          <Typography>
+                            Mild Liver Disease:{" "}
+                            {visit.input.liv1 ? "Yes" : "No"}
+                          </Typography>
+
+                          <Typography>
+                            Severe Liver Disease:{" "}
+                            {visit.input.liv2 ? "Yes" : "No"}
                           </Typography>
                           <Typography>
-                            Diabetes (organ damage):{" "}
+                            Hemiplegia / Paraplegia:{" "}
+                            {visit.input.paralysis ? "Yes" : "No"}
+                          </Typography>
+
+                          <Typography>
+                            Diabetes (without complications):{" "}
+                            {visit.input.dm1 ? "Yes" : "No"}
+                          </Typography>
+                          <Typography>
+                            Diabetes (with complications):{" "}
                             {visit.input.dm2 ? "Yes" : "No"}
                           </Typography>
 
@@ -643,10 +667,12 @@ const HistoryPage = () => {
                             Renal Disease: {visit.input.renal ? "Yes" : "No"}
                           </Typography>
                           <Typography>
-                            Malignancy: {visit.input.malignancy ? "Yes" : "No"}
+                            Any Malignancy (including leukemia / lymphoma):{" "}
+                            {visit.input.malignancy ? "Yes" : "No"}
                           </Typography>
                           <Typography>
-                            Metastatic Tumor: {visit.input.mets ? "Yes" : "No"}
+                            Metastatic Solid Tumor:{" "}
+                            {visit.input.mets ? "Yes" : "No"}
                           </Typography>
                           <Typography>
                             HIV/AIDS: {visit.input.hiv ? "Yes" : "No"}
