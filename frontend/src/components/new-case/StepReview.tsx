@@ -266,7 +266,7 @@ const StepReview = ({ data, onBack, onSubmit }: Props) => {
           data.mi && "Myocardial Infarction",
           data.chf && "Congestive Heart Failure",
           data.pvd && "Peripheral Vascular Disease",
-          data.cvd && "Cerebrovascular Disease",
+          data.cvd && "Cerebrovascular disease (history of stroke, TIA)",
           data.dem && "Dementia",
           data.cpd && "Chronic Pulmonary Disease",
           data.pud && "Peptic Ulcer Disease",

@@ -620,7 +620,7 @@ const HistoryPage = () => {
                             {visit.input.pvd ? "Yes" : "No"}
                           </Typography>
                           <Typography>
-                            Cerebrovascular: {visit.input.cvd ? "Yes" : "No"}
+                            Cerebrovascular disease (history of stroke, TIA): {visit.input.cvd ? "Yes" : "No"}
                           </Typography>
 
                           <Typography>

@@ -149,7 +149,7 @@ const StepComorbidities = ({ onNext, onBack, onChange }: Props) => {
               control={
                 <Checkbox checked={local.cvd} onChange={() => toggle("cvd")} />
               }
-              label="Cerebrovascular"
+              label="Cerebrovascular disease (history of stroke, TIA)"
             />
           </Paper>
         </Box>
@@ -318,7 +318,7 @@ const StepComorbidities = ({ onNext, onBack, onChange }: Props) => {
               label="Renal Disease"
             />
             <FormControl sx={{ mt: 2 }}>
-              <FormLabel>Malignancy</FormLabel>
+              <FormLabel>Malignancy (current, or recent within the last 5 years)</FormLabel>
 
               <RadioGroup
                 value={
